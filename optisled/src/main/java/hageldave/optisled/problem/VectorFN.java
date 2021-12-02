@@ -2,7 +2,7 @@ package hageldave.optisled.problem;
 
 import org.ejml.simple.SimpleMatrix;
 
-import hageldave.optisled.util.MatUtil;
+import hageldave.optisled.ejml.MatUtil;
 
 public interface VectorFN {
 	public SimpleMatrix evaluate(SimpleMatrix vec);

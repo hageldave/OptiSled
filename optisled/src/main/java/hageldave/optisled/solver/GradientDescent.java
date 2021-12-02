@@ -4,9 +4,9 @@ import java.util.LinkedList;
 
 import org.ejml.simple.SimpleMatrix;
 
+import hageldave.optisled.ejml.MatUtil;
 import hageldave.optisled.problem.ScalarFN;
 import hageldave.optisled.problem.VectorFN;
-import hageldave.optisled.util.MatUtil;
 
 public class GradientDescent {
 

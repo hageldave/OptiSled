@@ -1,4 +1,4 @@
-package hageldave.optisled.generic.util;
+package hageldave.optisled.generic.numerics;
 
 import hageldave.optisled.generic.problem.ScalarFN;
 import hageldave.optisled.generic.problem.VectorFN;

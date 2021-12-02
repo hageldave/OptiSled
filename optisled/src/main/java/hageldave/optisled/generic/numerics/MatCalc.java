@@ -1,4 +1,4 @@
-package hageldave.optisled.generic.util;
+package hageldave.optisled.generic.numerics;
 
 public interface MatCalc<M> {
 	

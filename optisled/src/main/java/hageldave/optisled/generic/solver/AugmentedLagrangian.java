@@ -4,10 +4,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
+import hageldave.optisled.generic.numerics.MatCalc;
 import hageldave.optisled.generic.problem.OptimizationProblem;
 import hageldave.optisled.generic.problem.ScalarFN.ScalarFNWithGradient;
 import hageldave.optisled.generic.problem.VectorFN;
-import hageldave.optisled.generic.util.MatCalc;
 
 public class AugmentedLagrangian<M> {
 

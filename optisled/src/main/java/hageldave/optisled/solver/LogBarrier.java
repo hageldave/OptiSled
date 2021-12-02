@@ -2,12 +2,12 @@ package hageldave.optisled.solver;
 
 import org.ejml.simple.SimpleMatrix;
 
+import hageldave.optisled.ejml.MatUtil;
 import hageldave.optisled.problem.OptimizationProblem;
 import hageldave.optisled.problem.ScalarFN.ScalarFNWithGradient;
 import hageldave.optisled.problem.VectorFN;
-import hageldave.optisled.util.MatUtil;
 
-import static hageldave.optisled.util.MatUtil.*;
+import static hageldave.optisled.ejml.MatUtil.*;
 
 import java.util.Arrays;
 import java.util.List;

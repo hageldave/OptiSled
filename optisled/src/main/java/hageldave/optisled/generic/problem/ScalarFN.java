@@ -1,6 +1,6 @@
 package hageldave.optisled.generic.problem;
 
-import hageldave.optisled.generic.util.MatCalc;
+import hageldave.optisled.generic.numerics.MatCalc;
 
 public interface ScalarFN<M> {
 	

@@ -4,9 +4,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Objects;
 
+import hageldave.optisled.generic.numerics.MatCalc;
+import hageldave.optisled.generic.numerics.NumericGradient;
 import hageldave.optisled.generic.problem.ScalarFN.ScalarFNWithGradient;
-import hageldave.optisled.generic.util.MatCalc;
-import hageldave.optisled.generic.util.NumericGradient;
 
 public class OptimizationProblemBuilder<M> {
 

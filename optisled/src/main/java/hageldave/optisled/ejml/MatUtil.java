@@ -1,4 +1,4 @@
-package hageldave.optisled.generic.util;
+package hageldave.optisled.ejml;
 
 import java.util.Arrays;
 import java.util.Locale;

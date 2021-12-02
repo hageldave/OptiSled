@@ -2,6 +2,7 @@ package hageldave.optisled.util;
 
 import org.ejml.simple.SimpleMatrix;
 
+import hageldave.optisled.ejml.MatUtil;
 import hageldave.optisled.problem.ScalarFN;
 import hageldave.optisled.problem.VectorFN;
 

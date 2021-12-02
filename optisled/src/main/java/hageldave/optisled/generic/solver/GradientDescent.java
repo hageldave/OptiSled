@@ -2,9 +2,9 @@ package hageldave.optisled.generic.solver;
 
 import java.util.LinkedList;
 
+import hageldave.optisled.generic.numerics.MatCalc;
 import hageldave.optisled.generic.problem.ScalarFN;
 import hageldave.optisled.generic.problem.VectorFN;
-import hageldave.optisled.generic.util.MatCalc;
 
 public class GradientDescent<M> {
 

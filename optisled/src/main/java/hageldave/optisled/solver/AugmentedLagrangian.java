@@ -6,10 +6,10 @@ import java.util.Objects;
 
 import org.ejml.simple.SimpleMatrix;
 
+import hageldave.optisled.ejml.MatUtil;
 import hageldave.optisled.problem.OptimizationProblem;
 import hageldave.optisled.problem.ScalarFN.ScalarFNWithGradient;
 import hageldave.optisled.problem.VectorFN;
-import hageldave.optisled.util.MatUtil;
 
 public class AugmentedLagrangian {
 
