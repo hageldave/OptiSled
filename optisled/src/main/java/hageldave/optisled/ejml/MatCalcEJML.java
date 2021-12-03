@@ -7,8 +7,9 @@ import org.ejml.simple.SimpleMatrix;
 import org.ejml.simple.SimpleOperations;
 import org.ejml.simple.ops.SimpleOperations_CDRM;
 import org.ejml.simple.ops.SimpleOperations_DDRM;
+import org.ejml.simple.ops.SimpleOperations_DSCC;
 import org.ejml.simple.ops.SimpleOperations_FDRM;
-import org.ejml.simple.ops.SimpleOperations_SPARSE;
+import org.ejml.simple.ops.SimpleOperations_FSCC;
 import org.ejml.simple.ops.SimpleOperations_ZDRM;
 
 import hageldave.optisled.generic.numerics.MatCalc;
@@ -16,20 +17,29 @@ import hageldave.optisled.generic.numerics.MatCalc;
 public class MatCalcEJML implements MatCalc<SimpleMatrix> {
 	
 	protected static final SimpleOperations<? extends Matrix>[] ops;
+	
 	static {
-		ops = new SimpleOperations[MatrixType.values().length];
-		for(int i=0; i<MatrixType.values().length; i++)
-			ops[i] = lookupOps(MatrixType.values()[i]);
+		ops = new SimpleOperations<?>[MatrixType.values().length];
+		for(MatrixType mt : MatrixType.values())
+			ops[mt.ordinal()] = lookupOps(mt);
 	}
 	
 	static SimpleOperations<? extends Matrix> lookupOps( MatrixType type ) {
         switch( type ) {
-            case DDRM: return new SimpleOperations_DDRM();
-            case FDRM: return new SimpleOperations_FDRM();
-            case ZDRM: return new SimpleOperations_ZDRM();
-            case CDRM: return new SimpleOperations_CDRM();
-            case DSCC: return new SimpleOperations_SPARSE();
-            default: return null;
+        case DDRM:
+            return new SimpleOperations_DDRM();
+        case FDRM:
+            return new SimpleOperations_FDRM();
+        case ZDRM:
+            return new SimpleOperations_ZDRM();
+        case CDRM:
+            return new SimpleOperations_CDRM();
+        case DSCC:
+            return new SimpleOperations_DSCC();
+        case FSCC:
+            return new SimpleOperations_FSCC();
+        default: 
+        	return null;
         }
     }
 
@@ -37,10 +47,25 @@ public class MatCalcEJML implements MatCalc<SimpleMatrix> {
 	public SimpleMatrix vecOf(double... v) {
 		return MatUtil.vectorOf(v);
 	}
+	
+	@Override
+	public SimpleMatrix matOf(double[][] values) {
+		return MatUtil.rowmajorMat(values);
+	}
+	
+	@Override
+	public SimpleMatrix matOf(int nRows, double... values) {
+		return MatUtil.matrix(nRows, values.length/nRows, values);
+	}
 
 	@Override
 	public SimpleMatrix zeros(int size) {
 		return MatUtil.vector(size);
+	}
+	
+	@Override
+	public SimpleMatrix zeros(int rows, int columns) {
+		return MatUtil.matrix(rows, columns);
 	}
 
 	@Override
@@ -72,6 +97,11 @@ public class MatCalcEJML implements MatCalc<SimpleMatrix> {
 	@Override
 	public SimpleMatrix matmul(SimpleMatrix a, SimpleMatrix b) {
 		return a.mult(b);
+	}
+	
+	@Override
+	public SimpleMatrix trp(SimpleMatrix m) {
+		return m.transpose();
 	}
 
 	@Override
