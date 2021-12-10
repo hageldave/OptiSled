@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import hageldave.optisled.generic.numerics.MatCalc;
 import hageldave.optisled.generic.problem.ScalarFN;
 import hageldave.optisled.generic.problem.VectorFN;
+import hageldave.optisled.history.DescentLog;
 
 public class GradientDescent<M> {
 
@@ -45,8 +46,6 @@ public class GradientDescent<M> {
 	
 	public double stepSizeOnTermination;
 	
-	public LinkedList<TrajectoryInfo> trajecInfo = new LinkedList<>();
-	
 	public final MatCalc<M> mc;
 	
 	public GradientDescent(MatCalc<M> mc) {
@@ -54,7 +53,7 @@ public class GradientDescent<M> {
 	}
 	
 	
-	public M arg_min(ScalarFN<M> f, VectorFN<M> df, M initialGuess, TrajectoryInfo initialInfo){
+	public M arg_min(ScalarFN<M> f, VectorFN<M> df, M initialGuess, DescentLog log){
 		double a = initialStepSize;
 		M x = mc.copy(initialGuess);
 		int numSteps = 0;
@@ -62,19 +61,18 @@ public class GradientDescent<M> {
 		double fx;
 		M dfx;
 		M d;
+		M step;
 		do {
 			fx = f.evaluate(x);
-			if(initialInfo != null) {
-				TrajectoryInfo info = initialInfo.copy();
-				info.loss = fx;
-				info.x = mc.toArray(x);
-				info.isGradientDescent = true;
-				trajecInfo.add(info);
-			}
 			dfx = df.evaluate(x);
 			d = mc.normalize_inp(mc.scale(dfx, -1.0));
+			if(log != null) {
+				log.position(mc.toArray(x));
+				log.loss(fx);
+				log.direction(mc.toArray(d));
+				log.stepSize(a);
+			}
 			// perform line search
-			M step;
 			int numLinsrchIter = 0;
 			// while( f(x+a*d) > f(x) + df(x)'a*d*l ) 1st wolfe condition
 			while( 
@@ -82,12 +80,21 @@ public class GradientDescent<M> {
 					&& numLinsrchIter++ < maxLineSearchIter
 			){
 				a *= stepDecr;
+				if(log != null)
+					log.stepSize(a);
 			}
 			// update location
 			x = mc.add(x,step);
-			a *= stepIncr;
 			stepSizeOnTermination = a;
-		} while( ++numSteps < maxDescentSteps && a*mc.norm(d) > terminationStepSize );
+			a *= stepIncr;
+		} while( ++numSteps < maxDescentSteps && mc.norm(step) > terminationStepSize );
+		
+		if(log != null) {
+			fx = f.evaluate(x);
+			log.position(mc.toArray(x));
+			log.loss(fx);
+		}
+		
 		return x;
 	}
 	

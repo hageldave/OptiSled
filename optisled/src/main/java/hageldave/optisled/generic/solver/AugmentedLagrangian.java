@@ -8,6 +8,7 @@ import hageldave.optisled.generic.numerics.MatCalc;
 import hageldave.optisled.generic.problem.OptimizationProblem;
 import hageldave.optisled.generic.problem.ScalarFN.ScalarFNWithGradient;
 import hageldave.optisled.generic.problem.VectorFN;
+import hageldave.optisled.history.DescentLog;
 
 public class AugmentedLagrangian<M> {
 
@@ -47,17 +48,10 @@ public class AugmentedLagrangian<M> {
 			ScalarFNWithGradient<M> f = augLagrangian(p, lambda, mu, mc);
 			GradientDescent<M> gd = new GradientDescent<>(mc);
 			gd.initialStepSize = initialStepsize;
-			x = gd.arg_min(f, f.gradient(), x, info);
+			DescentLog descentLog = null; // TODO: conditionally create a descent log
+			x = gd.arg_min(f, f.gradient(), x, descentLog);
 			
-			if(Objects.nonNull(trace)){
-				// fill in missing info information for gradient descent
-				for(TrajectoryInfo gdinfo : gd.trajecInfo) {
-					M x_ = mc.vecOf(gdinfo.x);
-					gdinfo.fx = p.f().evaluate(x_);
-					gdinfo.gx = Arrays.stream(p.g()).mapToDouble(g->g.evaluate(x_)).toArray();
-				}
-				trace.addAll(gd.trajecInfo);
-				
+			if(Objects.nonNull(trace)){	
 				info = new TrajectoryInfo();
 				info.x = mc.toArray(x);
 				info.fx = p.f().evaluate(x);
