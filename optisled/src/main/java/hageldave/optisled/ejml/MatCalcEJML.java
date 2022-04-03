@@ -264,7 +264,7 @@ public class MatCalcEJML implements MatCalc<DMatrixRMaj> {
 	
 	@Override
 	public DMatrixRMaj[] svd(DMatrixRMaj m, boolean full) {
-		SimpleSVD<SimpleMatrix> svd = SimpleMatrix.wrap(m).svd();
+		SimpleSVD<SimpleMatrix> svd = SimpleMatrix.wrap(m).svd(!full);
 		return new DMatrixRMaj[] {svd.getU().getDDRM(), svd.getW().getDDRM(), svd.getV().getDDRM()};
 	}
 	

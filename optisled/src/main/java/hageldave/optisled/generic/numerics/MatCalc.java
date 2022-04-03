@@ -324,151 +324,308 @@ public interface MatCalc<M> {
 	public default M sub(M a, double b) {
 		return add(a, -b);
 	}
-	
-	/** @return the same matrix/vector argument where the entry at given index was set (row major indexing) */
+
+	/**
+	 * @param m matrix/vector
+	 * @param idx index
+	 * @param v value
+	 * @return the same matrix/vector argument where the entry at given index was set (row major indexing)
+	 */
 	public M set_inp(M m, int idx, double v);
-	
-	/** @return the same matrix/vector argument where the entry at specified position was set */
+
+	/**
+	 * @param m matrix/vector
+	 * @param row row index
+	 * @param col column index
+	 * @param v value
+	 * @return the same matrix/vector argument where the entry at specified position was set
+	 */
 	public default M set_inp(M m, int row, int col, double v) {
 		return set_inp(m, row*numCols(m)+col, v);
 	}
-	
-	/** @return entry of matrix/vector at given index (row major indexing) */
+
+	/**
+	 * @param m matrix/vector
+	 * @param idx index
+	 * @return entry of matrix/vector at given index (row major indexing)
+	 */
 	public double get(M m, int idx);
-	
-	/** @return entry of matrix/vector at specified position */
+
+	/**
+	 * @param m matrix/vector
+	 * @param row row index
+	 * @param col column index
+	 * @return entry of matrix/vector at specified position
+	 */
 	public default double get(M m, int row, int col) {
 		return get(m, row*numCols(m)+col);
 	}
-	
-	/** @return a copy of the argument */
+
+	/**
+	 * @param m matrix/vector
+	 * @return a copy of the argument
+	 */
 	public M copy(M m);
 	
-	/** @return values of the matrix/vector in row major order */
+	/**
+	 * @param m matrix/vector
+	 * @return values of the matrix/vector in row major order */
 	public double[] toArray(M m);
 	
-	/** @return values of the matrix/vector {@code ( values[row][col] )} */
+	/**
+	 * @param m matrix/vector
+	 * @return values of the matrix/vector {@code ( values[row][col] )} */
 	public double[][] toArray2D(M m);
 	
-	/** @return same as argument which was normalized in place to unit length (if thresh smaller than norm) */
+	/**
+	 * @param m vector
+	 * @param thresh norm threshold for when a vector is considered to be 0 (and thus not normalized)
+	 * @return same as argument which was normalized in-place to unit length (if thresh smaller than norm) */
 	public default M normalize_inp(M m, double thresh) {
 		double norm = norm(m);
 		return norm < thresh ? m : scale_inp(m, 1/norm);
 	}
 	
-	/** @return normalized to unit length version of vector (if thresh smaller than norm) */
+	/**
+	 * @param m vector
+	 * @param thresh norm threshold for when a vector is considered to be 0 (and thus not normalized)
+	 * @return normalized to unit length version of vector (if thresh smaller than norm) */
 	public default M normalize(M m, double thresh) { return normalize_inp(copy(m), thresh); }
 	
-	/** @return same as argument which was normalized in place to unit length (if 1e-7 smaller than norm) */
+	/**
+	 * @param m vector
+	 * @return same as argument which was normalized in place to unit length (if 1e-7 smaller than norm) */
 	public default M normalize_inp(M m) { return normalize_inp(m, 1e-7); }
 	
-	/** @return normalized to unit length version of vector (if 1e-7 smaller than norm) */
+	/**
+	 * @param m vector
+	 * @return normalized to unit length version of vector (if 1e-7 smaller than norm) */
 	public default M normalize(M m) { return normalize_inp(copy(m)); }
 	
-	/** @return squared vector norm ||v||^2 = ‹v,v› */
+	/**
+	 * @param v vector
+	 * @return squared vector norm ||v||^2 = ‹v,v› */
 	public default double norm2(M v) { return inner(v,v); }
 	
-	/** @return vector norm ||v|| = sqrt(‹v,v›) */
+	/**
+	 * @param v vector
+	 * @return vector norm ||v|| = sqrt(‹v,v›) */
 	public default double norm(M v) { return Math.sqrt(norm2(v)); }
-	
+
+	/**
+	 * @param m matrix
+	 * @return squared Frobenius norm of the matrix (sum of squared elements)
+	 */
 	public default double frob2(M m) {
 		return sum(elmmul(m, m));
 	}
-	
+
+	/**
+	 * @param m matrix
+	 * @return Frobenius norm of the matrix (sqrt of sum of squared elements)
+	 */
 	public default double frob(M m) {
 		return Math.sqrt(frob2(m));
 	}
 	
-	/** @return singular value decomposition (full or sparse/economic) 
-	 * with matrices U,S,V where m=U*S*trp(V)
+	/**
+	 * @param m matrix
+	 * @param full when false, allows omitting superfluous components, otherwise U and V will be computed as complete bases
+	 * @return singular value decomposition (full or sparse/economic) with matrices U,S,V where m=U*S*trp(V).
+	 * singular values are ordered from largest to smallest along the diagonal (largest at 0,0)
 	 */
 	public M[] svd(M m, boolean full);
 	
-	/** @returns Cholesky decomposition of m, the upper triangular part U, so that m = U' U */
+	/**
+	 * @param m matrix
+	 * @returns Cholesky decomposition of m, the upper triangular part U, so that m = trp(U)*U */
 	public M cholesky(M m);
-	
+
+	/**
+	 * @param m matrix (symmetric)
+	 * @return eigendecomposition for symmetric matrices, with matrices Q,S where m = Q*S*Q^-1 (eigenvectors in columns of Q)
+	 */
 	public M[] symEvd(M m);
 	
-	/** @return determinant of m */
+	/**
+	 * @param m matrix
+	 * @return determinant of m */
 	public double det(M m);
 	
-	/** @return element wise exp */
+	/**
+	 * @param m matrix
+	 * @return element-wise exp (in-place) */
 	public default M exp_inp(M m) {
 		return elemwise_inp(m, Math::exp);
 	}
 	
-	/** @return element wise sqrt */
+	/**
+	 * @param m matrix
+	 * @return element wise sqrt (in-place) */
 	public default M sqrt_inp(M m) {
 		return elemwise_inp(m, Math::sqrt);
 	}
 	
-	/** @return element wise f(m_ij) */
+	/**
+	 * @param m matrix
+	 * @param f funtion to be applied to each element
+	 * @return element wise f(m_ij) (in-place) */
 	public default M elemwise_inp(M m, DoubleUnaryOperator f) {
 		for(int i=0; i<numElem(m); i++)
 			set_inp(m, i, f.applyAsDouble(get(m, i)));
 		return m;
 	}
 	
-	/** @return side by side concatenation (equal number of rows) */
+	/**
+	 * @param a matrix/vector
+	 * @param b matrix/vector
+	 * @return side by side concatenation (equal number of rows) */
 	public M concatHorz(M a, M b);
 	
-	/** @return stacked concatenation (equal number of columns) */
+	/**
+	 * @param a matrix/vector
+	 * @param b matrix/vector
+	 * @return stacked concatenation (equal number of columns) */
 	public M concatVert(M a, M b);
-	
-	/** @return rows ra to rb (exclusive) and columns ca to cb (exclusive) */
+
+	/**
+	 * @param m matrix/vector
+	 * @param ra row start
+	 * @param rb row end (exclusive)
+	 * @param ca column start
+	 * @param cb column end (exclusive)
+	 * @return sub-matrix of rows ra to rb (exclusive) and columns ca to cb (exclusive)
+	 */
 	public M getRange(M m, int ra, int rb, int ca, int cb);
-	
-	
+
+	/**
+	 * @param m matrix/vector
+	 * @param r row index
+	 * @return row of m
+	 */
 	public default M getRow(M m, int r) {
 		return getRange(m, r, r+1, 0, numCols(m));
 	}
-	
+
+	/**
+	 * @param m matrix/vector
+	 * @param c column index
+	 * @return column of m
+	 */
 	public default M getCol(M m, int c) {
 		return getRange(m, 0, numRows(m), c, c+1);
 	}
 	
-	/** @return the diagonal of the matrix as column vector */
+	/**
+	 * @param m matrix
+	 * @return the diagonal of the matrix as column vector */
 	public M diagV(M m);
 	
-	/** @return the diagonal matrix from the vector */
+	/**
+	 * @param v vector
+	 * @return the diagonal matrix from the vector (vector elements put on diagonal) */
 	public M diagM(M v);
-	
+
+	/**
+	 * copies values of src to target (copies values in row-major order, matrices don't need to be of same size)
+	 * @param src source matrix
+	 * @param target target matrix
+	 */
 	public default void copyValues(M src, M target) {
 		copyValues(src, 0, target, 0, Math.min(numElem(src), numElem(target)));
 	}
-	
+
+	/**
+	 * copies specified range of values from src to target
+	 * (copies values in row-major order, matrices don't need to be of same size)
+	 * @param src source matrix
+	 * @param startSrc start index in source
+	 * @param target target matrix
+	 * @param startTarget start index in target
+	 * @param len number of values to copy (row-major order)
+	 */
 	public default void copyValues(M src, int startSrc, M target, int startTarget, int len) {
 		for(int i=0; i<len; i++)
 			set_inp(target, i+startTarget, get(src, i+startSrc));
 	}
-	
+
+	/**
+	 * @param n array length
+	 * @return array of type M (since Java does not allow creation of generically typed arrays)
+	 */
 	public M[] matArray(int n);
-	
+
+	/**
+	 * @param m outer array length
+	 * @param n inner array length
+	 * @return 2D array of type M (since Java does not allow creation of generically typed arrays)
+	 */
 	public M[][] matArray(int m, int n);
-	
-	
-//	public default M[] matArray(M ... ms) {
-//		return ms;
-//	}
-	
+
+	/**
+	 * @param a matrix/vector
+	 * @param b matrix/vector
+	 * @return matrix multiplication y=a*b
+	 */
 	public default M mult_ab(M a, M b) {
 		return matmul(a, b);
 	}
-	
+
+	/**
+	 * @param a matrix/vector
+	 * @param b matrix/vector
+	 * @return matrix multiplication y=trp(a)*b
+	 */
 	public M mult_aTb(M a, M b);
-	
+
+	/**
+	 * @param a matrix/vector
+	 * @param b matrix/vector
+	 * @return matrix multiplication y=a*trp(b)
+	 */
 	public M mult_abT(M a, M b);
-	
+
+	/**
+	 * @param a matrix/vector
+	 * @param b matrix/vector
+	 * @param c matrix/vector
+	 * @return matrix multiplication y=trp(a)*b*c
+	 */
 	public default M mult_aTbc(M a, M b, M c) {
 		return matmul(mult_aTb(a, b), c);
 	}
-	
+
+	/**
+	 * @param a matrix/vector
+	 * @param b matrix/vector
+	 * @param c matrix/vector
+	 * @return matrix multiplication y=a*b*trp(c)
+	 */
 	public default M mult_abcT(M a, M b, M c) {
 		return matmul(a, mult_abT(b, c));
 	}
-	
+
+	/**
+	 * @param a matrix/vector
+	 * @param b matrix/vector
+	 * @param c matrix/vector
+	 * @return matrix multiplication y=a*trp(b)*c
+	 */
+	public default M mult_abTc(M a, M b, M c) {
+		return matmul(a, mult_aTb(b, c));
+	}
+
+	/**
+	 * @param m matrix/vector
+	 * @return sum of elements
+	 */
 	public double sum(M m);
-	
+
+	/**
+	 * @param v1 vector
+	 * @param v2 vector
+	 * @return squared distance d=||v1-v2||^2
+	 */
 	public default double dist2(M v1, M v2) {
 		double sum=0;
 		for(int i=0; i<numElem(v1); i++) {
@@ -477,7 +634,13 @@ public interface MatCalc<M> {
 		}
 		return sum;
 	}
-	
+
+	/**
+	 * @param a matrix of row vectors
+	 * @param b matrix of row vectors
+	 * @return pairwise distances between rows of a and b.
+	 * Entry at (r,c) is distance between a_c and b_r.
+	 */
 	public default M pairwiseDistances2(M a, M b) {
 		M dists = zeros(numRows(b), numRows(a));
 		for(int i=0; i<numRows(b); i++) {
@@ -490,7 +653,11 @@ public interface MatCalc<M> {
 		}
 		return dists;
 	}
-	
+
+	/**
+	 * @param evd eigendecomposition [Q,S]
+	 * @return sorted eigenvectors and eigenvalues in eigenvalue ascending order (in-place sorting)
+	 */
 	default M[] sortEVD_inp(M[] evd) {
 		double[] negvals = toArray(scale(diagV(evd[1]), -1));
 		int[] order = argsort(negvals);
@@ -505,8 +672,12 @@ public interface MatCalc<M> {
 		}
 		return evd;
 	}
-	
-	
+
+	/**
+	 * argument sorting
+	 * @param toSort values to sort (will stay untouched)
+	 * @return order array of indices. smallest=toSort[order[0]], largest=toSort[order[toSort.length-1]]
+	 */
 	public static int[] argsort(final double[] toSort) {
 		Integer[] indices = IntStream.range(0, toSort.length).mapToObj(Integer::valueOf).toArray(Integer[]::new);
 		Arrays.sort(indices, (i,j)->Double.compare(toSort[i], toSort[j]));
