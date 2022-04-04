@@ -1,5 +1,9 @@
 package hageldave.optisled.generic.problem;
 
+/**
+ * Constrained optimization problem with objective and inequality constraints.
+ * @param <M> matrix type
+ */
 public interface OptimizationProblem<M> {
 	
 	public int dimensionality();

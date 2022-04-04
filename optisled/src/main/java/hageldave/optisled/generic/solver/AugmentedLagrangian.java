@@ -10,6 +10,10 @@ import hageldave.optisled.generic.problem.ScalarFN.ScalarFNWithGradient;
 import hageldave.optisled.generic.problem.VectorFN;
 import hageldave.optisled.history.DescentLog;
 
+/**
+ * Augmented Lagrangian solver for nonlinear constrained optimization problems.
+ * @param <M> matrix type
+ */
 public class AugmentedLagrangian<M> {
 
 	public int maxNumIterations = 80;

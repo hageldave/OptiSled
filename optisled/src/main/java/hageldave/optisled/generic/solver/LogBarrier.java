@@ -9,6 +9,13 @@ import hageldave.optisled.generic.problem.OptimizationProblem;
 import hageldave.optisled.generic.problem.ScalarFN.ScalarFNWithGradient;
 import hageldave.optisled.generic.problem.VectorFN;
 
+/**
+ * Log-Barrier solver for nonlinear constrained optimization problems.
+ * This solver needs feasible initialization. i.e. init has to satisfy all constraints.
+ * There is a strategy to walk into a feasible region from outside if initialization is infeasible,
+ * but it is not guaranteed to succeed.
+ * @param <M> matrix type
+ */
 public class LogBarrier<M> {
 
 	public double initialMu = 8.0;

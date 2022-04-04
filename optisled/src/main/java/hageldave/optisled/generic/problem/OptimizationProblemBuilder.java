@@ -8,6 +8,10 @@ import hageldave.optisled.generic.numerics.MatCalc;
 import hageldave.optisled.generic.numerics.NumericGradient;
 import hageldave.optisled.generic.problem.ScalarFN.ScalarFNWithGradient;
 
+/**
+ * Builder for {@link OptimizationProblem}s.
+ * @param <M> matrix type
+ */
 public class OptimizationProblemBuilder<M> {
 
 	public static class OptimizationProblemImpl<M> implements OptimizationProblem<M> {

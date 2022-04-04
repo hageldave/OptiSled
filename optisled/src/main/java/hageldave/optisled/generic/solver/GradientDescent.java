@@ -7,6 +7,11 @@ import hageldave.optisled.generic.problem.ScalarFN;
 import hageldave.optisled.generic.problem.VectorFN;
 import hageldave.optisled.history.DescentLog;
 
+/**
+ * Gradient descent instance with hyper parameter configuration.
+ * Descent is run by calling {@link #arg_min(ScalarFN, VectorFN, M, DescentLog)}.
+ * @param <M> matrix type
+ */
 public class GradientDescent<M> {
 
 	/** 
@@ -43,16 +48,41 @@ public class GradientDescent<M> {
 	 * (preventing infinite loops in ill conditioned problems) 
 	 */
 	public int maxDescentSteps = 100;
-	
+
+	/** the step size of gd when argmin terminated */
 	public double stepSizeOnTermination;
-	
+
+	/** the matrix calculation object for the matrix type M */
 	public final MatCalc<M> mc;
-	
+
+	/**
+	 * Creates a new GD instance for matrices of type M using
+	 * specified matrix calculator.
+	 * @param mc matrix calculator to perform linear algebra calculations
+	 */
 	public GradientDescent(MatCalc<M> mc) {
 		this.mc = mc;
 	}
-	
-	
+
+	/**
+	 * finds argmin by performing gradient descent
+	 * @param f function to be minimized
+	 * @param df gradient of the function
+	 * @param initialGuess initialization (guess of minimum location)
+	 * @return location of minimum
+	 */
+	public M arg_min(ScalarFN<M> f, VectorFN<M> df, M initialGuess){
+		return this.arg_min(f,df,initialGuess,null);
+	}
+
+	/**
+	 * finds argmin by performing gradient descent
+	 * @param f function to be minimized
+	 * @param df gradient of the function
+	 * @param initialGuess initialization (guess of minimum location)
+	 * @param log optional log object for recording the optimization trajectory (can be null)
+	 * @return location of minimum
+	 */
 	public M arg_min(ScalarFN<M> f, VectorFN<M> df, M initialGuess, DescentLog log){
 		double a = initialStepSize;
 		M x = mc.copy(initialGuess);
@@ -97,21 +127,5 @@ public class GradientDescent<M> {
 		
 		return x;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 }

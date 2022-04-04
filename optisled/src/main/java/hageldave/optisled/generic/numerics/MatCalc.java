@@ -10,8 +10,16 @@ import java.util.stream.IntStream;
  * This allows for the implementation of numeric algorithms
  * (e.g. gradient descent) that are agnostic to the choice 
  * of a linear algebra library, and makes it possible to 
- * integrate this API into environments where the a matrix
+ * integrate this API into environments where a matrix
  * type is already present.
+ * <p></p>
+ * This collection of methods is by no means complete, but it contains
+ * some of the more frequently used routines in linear algebra besides the basic operations,
+ * such as EVD, SVD, Cholesky, pairwise distances, and some more.
+ * When needing to express a loss function for a specific problem and need other operations,
+ * you can extend this interface to add the needed methods
+ * or implement the loss with a baked in linear algebra library
+ * (in which case you loose the ability to use a drop-in replacement of MatCalc).
  * 
  * @author hageldave
  * @param <M> the matrix type
@@ -682,6 +690,16 @@ public interface MatCalc<M> {
 		Integer[] indices = IntStream.range(0, toSort.length).mapToObj(Integer::valueOf).toArray(Integer[]::new);
 		Arrays.sort(indices, (i,j)->Double.compare(toSort[i], toSort[j]));
 		return Arrays.stream(indices).mapToInt(Integer::intValue).toArray();
+	}
+
+	/**
+	 * @param m matrix
+	 * @return pseudo inverse of m
+	 */
+	public default M pinv(M m) {
+		M[] svd = svd(m, false);
+		M Sinv = diagM(elemwise_inp(diagV(svd[1]), v->1.0/v));
+		return mult_abcT(svd[2],Sinv,svd[0]);
 	}
 	
 }

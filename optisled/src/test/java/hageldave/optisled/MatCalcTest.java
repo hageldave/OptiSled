@@ -1,20 +1,23 @@
 package hageldave.optisled;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import hageldave.optisled.ejml.MatCalcEJML;
 import hageldave.optisled.generic.numerics.MatCalc;
 
+import java.lang.reflect.InvocationTargetException;
+
+import static org.junit.jupiter.api.Assertions.*;
+
 public class MatCalcTest {
 
 	@ParameterizedTest
 	@ValueSource(classes = {MatCalcEJML.class})
-	public <M> void testMatCalc(Class<MatCalc<M>> implementation) throws InstantiationException, IllegalAccessException {
-		MatCalc<M> mc = implementation.newInstance();
+	public <M> void testMatCalc(Class<MatCalc<M>> implementation)
+			throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException
+	{
+		MatCalc<M> mc = implementation.getDeclaredConstructor().newInstance();
 		// a = [0,0]
 		M a = mc.zeros(2);
 		assertEquals(1, mc.numCols(a));
@@ -22,7 +25,7 @@ public class MatCalcTest {
 		assertEquals(0.0, mc.get(a, 0));
 		assertEquals(0.0, mc.get(a, 1));
 		// a = [1,0]
-		assertTrue(a == mc.set_inp(a, 0, 1.0));
+		assertSame(a, mc.set_inp(a, 0, 1.0));
 		assertEquals(1.0, mc.get(a, 0,0));
 		assertEquals(0.0, mc.get(a, 1,0));
 		// b = [1,0]
@@ -30,7 +33,7 @@ public class MatCalcTest {
 		assertEquals(1.0, mc.inner(a, b));
 		assertEquals(0.0, mc.inner(a, mc.vecOf(0.0, 1.0)));
 		// b = [2,0]
-		assertTrue(b == mc.scale_inp(b, 2.0));
+		assertSame(b, mc.scale_inp(b, 2.0));
 		assertEquals(2.0, mc.inner(a, b));
 		assertEquals(4.0, mc.norm2(b));
 		assertEquals(2.0, mc.norm(b));
@@ -54,6 +57,12 @@ public class MatCalcTest {
 		M g = mc.trp(a);
 		assertEquals(mc.numCols(a), mc.numRows(g));
 		assertEquals(mc.numRows(a), mc.numCols(g));
+
+		M rot = mc.matOf(2, Math.cos(1), -Math.sin(1), Math.cos(1), Math.sin(1));
+		M inverse = mc.pinv(rot);
+		M diag = mc.diagV(mc.mult_ab(rot, inverse));
+		for(int i=0; i<mc.numElem(diag); i++)
+			assertEquals(1.0,mc.get(diag,i),1e-10);
 	}
 	
 }

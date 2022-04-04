@@ -2,10 +2,18 @@ package hageldave.optisled.generic.problem;
 
 import hageldave.optisled.generic.numerics.MatCalc;
 
+/**
+ * Function taking vector input and giving scalar output.
+ * @param <M> matrix (vector) type
+ */
 public interface ScalarFN<M> {
 	
 	public double evaluate(M vec);
-	
+
+	/**
+	 * Special {@link ScalarFN} with gradient information
+	 * @param <M> matrix type
+	 */
 	public interface ScalarFNWithGradient<M> extends ScalarFN<M> {
 		public VectorFN<M> gradient();
 	}
