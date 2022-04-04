@@ -398,10 +398,10 @@ public class MatCalcEJML implements MatCalc<DMatrixRMaj> {
         return scale*scale*total;
 	}
 
-//	@Override
-//	public DMatrixRMaj pinv(DMatrixRMaj m) {
-//		DMatrixRMaj result = zeros(numCols(m), numRows(m));
-//		ops.pseudoInverse(m, result);
-//		return result;
-//	}
+	@Override
+	public DMatrixRMaj pinv(DMatrixRMaj m) {
+		DMatrixRMaj result = zeros(numCols(m), numRows(m));
+		ops.pseudoInverse(m, result);
+		return result;
+	}
 }

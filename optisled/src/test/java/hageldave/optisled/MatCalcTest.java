@@ -60,7 +60,11 @@ public class MatCalcTest {
 
 		M rot = mc.matOf(2, Math.cos(1), -Math.sin(1), Math.cos(1), Math.sin(1));
 		M inverse = mc.pinv(rot);
-		M diag = mc.diagV(mc.mult_ab(rot, inverse));
+		M mult = mc.mult_ab(rot, inverse);
+		M diag = mc.diagV(mult);
+		M zero = mc.sub(mult,mc.diagM(diag));
+		for(int i=0; i<mc.numElem(zero); i++)
+			assertEquals(0.0, mc.get(zero,i), 1e-10, "i="+i);
 		for(int i=0; i<mc.numElem(diag); i++)
 			assertEquals(1.0,mc.get(diag,i),1e-10);
 	}
