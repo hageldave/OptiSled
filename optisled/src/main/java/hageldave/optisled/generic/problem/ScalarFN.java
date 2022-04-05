@@ -7,18 +7,24 @@ import hageldave.optisled.generic.numerics.MatCalc;
  * @param <M> matrix (vector) type
  */
 public interface ScalarFN<M> {
-	
-	public double evaluate(M vec);
+	/**
+	 * @param x function argument (vector)
+	 * @return value (scalar) of function evaluated at x
+	 */
+	public double evaluate(M x);
 
 	/**
-	 * Special {@link ScalarFN} with gradient information
+	 * Special {@link ScalarFN} with gradient information.
+	 * Gradients should be column vectors (by convention), e.g.
+	 * {@code d/dx x^T A x = A^T 2x} and NOT {@code 2x^T A}, or using a linear example,
+	 * {@code d/dx a^T x = d/dx dot(a,x) = a} and NOT {@code a^T}.
 	 * @param <M> matrix type
 	 */
 	public interface ScalarFNWithGradient<M> extends ScalarFN<M> {
 		public VectorFN<M> gradient();
 	}
 	
-	public static <M> ScalarFNWithGradient<M> constant(final double c, MatCalc<M> mc) {
+	public static <M> ScalarFNWithGradient<M> constant(MatCalc<M> mc, final double c) {
 		return new ScalarFNWithGradient<M>() {
 			@Override
 			public double evaluate(M x) {
@@ -31,7 +37,7 @@ public interface ScalarFN<M> {
 		};
 	}
 	
-	public static <M> ScalarFNWithGradient<M> linear(final M coefficients, final double c, MatCalc<M> mc) {
+	public static <M> ScalarFNWithGradient<M> linear(final MatCalc<M> mc, final M coefficients, final double c) {
 		return new ScalarFNWithGradient<M>() {
 			@Override
 			public double evaluate(M x) {
@@ -42,6 +48,48 @@ public interface ScalarFN<M> {
 				return x->coefficients;
 			}
 		};
+	}
+
+	public static <M> ScalarFNWithGradient<M> quadratic(MatCalc<M> mc, final M quad, final double c){
+		return quadratic(mc,quad,null,c);
+	}
+
+	public static <M> ScalarFNWithGradient<M> quadratic(MatCalc<M> mc, final M quad, final M lin, final double c) {
+		if (lin != null)
+			return new ScalarFNWithGradient<M>() {
+				@Override
+				public double evaluate(M x) {
+					return mc.inner(x, mc.mult_ab(quad, x)) + mc.inner(lin, x) + c;
+				}
+
+				@Override
+				public VectorFN<M> gradient() {
+					M quadT = mc.trp(quad);
+					return new VectorFN<M>() {
+						@Override
+						public M evaluate(M x) {
+							return mc.add( mc.scale(mc.mult_ab(quadT,x),2) , lin );
+						}
+					};
+				}
+			};
+		else
+			return new ScalarFNWithGradient<M>() {
+				@Override
+				public double evaluate(M x) {
+					return mc.inner(x, mc.mult_ab(quad, x)) + c;
+				}
+
+				@Override
+				public VectorFN<M> gradient() {
+					return new VectorFN<M>() {
+						@Override
+						public M evaluate(M x) {
+							return mc.scale(mc.mult_ab(quad,x),2);
+						}
+					};
+				}
+			};
 	}
 	
 }
