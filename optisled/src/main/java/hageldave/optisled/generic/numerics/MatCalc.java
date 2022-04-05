@@ -24,45 +24,45 @@ import java.util.stream.IntStream;
  * @author hageldave
  * @param <M> the matrix type
  */
-public interface MatCalc<M> {
+ public interface MatCalc<M> {
 	
 	/**
 	 * @param v values
 	 * @return column vector of given values
 	 */
-	public M vecOf(double ... v);
+	 M vecOf(double ... v);
 	
 	/**
 	 * @param nRows number of rows
 	 * @param values (in row major order)
 	 * @return matrix with {@code nRows} and {@code nCols=values.length/nRows} filled with specified values
 	 */
-	public M matOf(int nRows, double... values);
+	 M matOf(int nRows, double... values);
 	
 	/**
 	 * @param values  of the matrix
 	 * @return matrix from the specified 2d array {@code (rowValues[] = values[i])}
 	 */
-	public M matOf(double[][] values);
+	 M matOf(double[][] values);
 	
 	/**
 	 * @param n number of dimensions
 	 * @return zero column vector of dimension {@code n}
 	 */
-	public M zeros(int n);
+	 M zeros(int n);
 	
 	/** 
 	 * @param rows number of rows
 	 * @param columns number of columns
 	 * @return matrix of zeros of specified size
 	 */
-	public M zeros(int rows, int columns);
+	 M zeros(int rows, int columns);
 	
 	/**
 	 * @param n number of rows (=number of columns)
 	 * @return identity matrix of size n x n
 	 */
-	public default M eye(int n) {
+	 default M eye(int n) {
 		return eye(n, 1.0);
 	}
 	
@@ -71,7 +71,7 @@ public interface MatCalc<M> {
 	 * @param s scaling factor
 	 * @return s*identity matrix of size n x n 
 	 */
-	public M eye(int n, double s);
+	 M eye(int n, double s);
 	
 	/**
 	 * @param rows number of rows
@@ -79,7 +79,7 @@ public interface MatCalc<M> {
 	 * @param rnd random number generator
 	 * @return matrix of random values in range 0.0 .. 1.0
 	 */
-	public default M rand(int rows, int cols, Random rnd) {
+	 default M rand(int rows, int cols, Random rnd) {
 		M m = zeros(rows, cols);
 		for(int r=0; r<rows; r++)
 			for(int c=0; c<cols; c++)
@@ -92,7 +92,7 @@ public interface MatCalc<M> {
 	 * @param cols number of columns
 	 * @return matrix of random values in range 0.0 .. 1.0
 	 */
-	public default M rand(int rows, int cols) {
+	 default M rand(int rows, int cols) {
 		return rand(rows, cols, new Random());
 	}
 	
@@ -100,7 +100,7 @@ public interface MatCalc<M> {
 	 * @param n
 	 * @return column vector of random values in range 0.0 .. 1.0
 	 */
-	public default M rand(int n) {
+	 default M rand(int n) {
 		return rand(n, 1);
 	}
 	
@@ -110,7 +110,7 @@ public interface MatCalc<M> {
 	 * @param rnd random number generator
 	 * @return matrix with normally distributed random values (standard normal, mean=0, var=1)
 	 */
-	public default M randN(int rows, int cols, Random rnd) {
+	 default M randN(int rows, int cols, Random rnd) {
 		M m = zeros(rows, cols);
 		for(int r=0; r<rows; r++)
 			for(int c=0; c<cols; c++)
@@ -123,7 +123,7 @@ public interface MatCalc<M> {
 	 * @param cols number of columns
 	 * @return random matrix with normally distributed values (standard normal, mean=0, var=1)
 	 */
-	public default M randN(int rows, int cols) {
+	 default M randN(int rows, int cols) {
 		return randN(rows, cols, new Random());
 	}
 	
@@ -131,18 +131,18 @@ public interface MatCalc<M> {
 	 * @param m matrix
 	 * @return number of rows
 	 */
-	public int numRows(M m);
+	 int numRows(M m);
 	
 	/**
 	 * @param m matrix 
 	 * @return number of columns */
-	public int numCols(M m);
+	 int numCols(M m);
 	
 	/**
 	 * @param m matrix
 	 * @return number of elements
 	 */
-	public default int numElem(M m) {
+	 default int numElem(M m) {
 		return numCols(m)*numRows(m);
 	}
 	
@@ -151,7 +151,7 @@ public interface MatCalc<M> {
 	 * @param b vector
 	 * @return inner or dot product for given vectors ‹a,b›
 	 */
-	public double inner(M a, M b);
+	 double inner(M a, M b);
 	
 	/**
 	 * just an alias for {@link #inner(M, M)}
@@ -159,61 +159,61 @@ public interface MatCalc<M> {
 	 * @param b vector
 	 * @return inner or dot product for given vectors ‹a,b›
 	 */
-	public default double dot(M a, M b) {return inner(a,b);}
+	 default double dot(M a, M b) {return inner(a,b);}
 	
 	/**
 	 * @param m matrix/vector
 	 * @param s scaling factor
 	 * @return a scaled version of given matrix/vector
 	 */
-	public M scale(M m, double s);
+	 M scale(M m, double s);
 	
 	/**
 	 * @param m matrix/vector to be scaled in-place
 	 * @param s scaling
 	 * @return the same matrix/vector argument which was scaled in-place 
 	 */
-	public M scale_inp(M m, double s);
+	 M scale_inp(M m, double s);
 	
 	/**
 	 * @param a matrix/vector
 	 * @param b matrix/vector
 	 * @return result of matrix multiplication {@code a * b}
 	 */
-	public M matmul(M a, M b);
+	 M matmul(M a, M b);
 	
 	/**
 	 * @param a matrix/vector
 	 * @param b matrix/vector
 	 * @return element-wise multiplication of a and b (need to be of same size)
 	 */
-	public M elmmul(M a, M b);
+	 M elmmul(M a, M b);
 	
 	/**
 	 * @param m matrix
 	 * @param colV column vector
 	 * @return copy of m where each row i was scaled by entry i of column vector
 	 */
-	public M mulRowsByColVec(M m, M colV);
+	 M mulRowsByColVec(M m, M colV);
 	
 	/**
 	 * @param m matrix
 	 * @param rowV row vector
 	 * @return copy of m where each column j was scaled by entry j of row vector
 	 */
-	public M mulColsByRowVec(M m, M rowV);
+	 M mulColsByRowVec(M m, M rowV);
 	
 	/**
 	 * @param m matrix
 	 * @return column vector of row sums of m
 	 */
-	public M rowSums(M m);
+	 M rowSums(M m);
 	
 	/**
 	 * @param m matrix
 	 * @return column vector of row means of m
 	 */
-	public default M rowMeans(M m) {
+	 default M rowMeans(M m) {
 		return scale_inp(rowSums(m), 1.0/numCols(m));
 	}
 	
@@ -221,7 +221,7 @@ public interface MatCalc<M> {
 	 * @param m matrix
 	 * @return row vector of column means of m
 	 */
-	public default M colMeans(M m) {
+	 default M colMeans(M m) {
 		return scale_inp(colSums(m), 1.0/numRows(m));
 	}
 	
@@ -229,107 +229,107 @@ public interface MatCalc<M> {
 	 * @param m matrix
 	 * @return column vector of row minimums
 	 */
-	public M rowMins(M m);
+	 M rowMins(M m);
 	
 	/**
 	 * @param m matrix
 	 * @return column vector of row maximums
 	 */
-	public M rowMaxs(M m);
+	 M rowMaxs(M m);
 	
 	/**
 	 * @param m matrix
 	 * @return row vector of column minimums
 	 */
-	public M colMins(M m);
+	 M colMins(M m);
 	
 	/**
 	 * @param m matrix
 	 * @return row vector of column maximums
 	 */
-	public M colMaxs(M m);
+	 M colMaxs(M m);
 	
 	/**
 	 * @param m matrix
 	 * @return row vector of column sums of m
 	 */
-	public M colSums(M m);
+	 M colSums(M m);
 	
 	/**
 	 * @param m matrix
 	 * @param rowV row vector
 	 * @return result of subtracting specified row vector from each row of m
 	 */
-	public M subRowVec(M m, M rowV);
+	 M subRowVec(M m, M rowV);
 	
 	/**
 	 * @param m matrix
 	 * @param colV column vector
 	 * @return result of subtracting specified column vector from each column of m
 	 */
-	public M subColVec(M m, M colV);
+	 M subColVec(M m, M colV);
 	
 	/**
 	 * @param m matrix
 	 * @param rowV row vector
 	 * @return result of adding specified row vector to each row of m
 	 */
-	public M addRowVec(M m, M rowV);
+	 M addRowVec(M m, M rowV);
 	
 	/**
 	 * @param m matrix
 	 * @param colV column vector
 	 * @return result of adding specified column vector to each column of m
 	 */
-	public M addColVec(M m, M colV);
+	 M addColVec(M m, M colV);
 	
 	/**
 	 * @param m matrix
 	 * @return transpose of m
 	 */
-	public M trp(M m);
+	 M trp(M m);
 	
 	/**
 	 * @param a matrix/vector
 	 * @param b scalar
 	 * @return result of adding b to each entry of a
 	 */
-	public M add(M a, double b);
+	 M add(M a, double b);
 	
 	/**
 	 * @param a matrix/vector
 	 * @param b matrix/vector
 	 * @return a+b (need to be same size)
 	 */
-	public M add(M a, M b);
+	 M add(M a, M b);
 	
 	/**
 	 * @param a matrix/vector
 	 * @param b matrix/vector
 	 * @return a-b (in-place subtraction from a, need to be same size)
 	 */
-	public M sub(M a, M b);
+	 M sub(M a, M b);
 	
 	/**
 	 * @param a matrix/vector
 	 * @param b matrix/vector
 	 * @return a=a+b (in-place addition to a, need to be same size)
 	 */
-	public M add_inp(M a, M b);
+	 M add_inp(M a, M b);
 	
 	/**
 	 * @param a matrix/vector
 	 * @param b matrix/vector
 	 * @return a=a-b (in-place subtraction from a, need to be same size)
 	 */
-	public M sub_inp(M a, M b);
+	 M sub_inp(M a, M b);
 	
 	/**
 	 * @param a matrix/vector
 	 * @param b scalar
 	 * @return result of subtracting b from each entry of a
 	 */
-	public default M sub(M a, double b) {
+	 default M sub(M a, double b) {
 		return add(a, -b);
 	}
 
@@ -339,7 +339,7 @@ public interface MatCalc<M> {
 	 * @param v value
 	 * @return the same matrix/vector argument where the entry at given index was set (row major indexing)
 	 */
-	public M set_inp(M m, int idx, double v);
+	 M set_inp(M m, int idx, double v);
 
 	/**
 	 * @param m matrix/vector
@@ -348,7 +348,7 @@ public interface MatCalc<M> {
 	 * @param v value
 	 * @return the same matrix/vector argument where the entry at specified position was set
 	 */
-	public default M set_inp(M m, int row, int col, double v) {
+	 default M set_inp(M m, int row, int col, double v) {
 		return set_inp(m, row*numCols(m)+col, v);
 	}
 
@@ -357,7 +357,7 @@ public interface MatCalc<M> {
 	 * @param idx index
 	 * @return entry of matrix/vector at given index (row major indexing)
 	 */
-	public double get(M m, int idx);
+	 double get(M m, int idx);
 
 	/**
 	 * @param m matrix/vector
@@ -365,7 +365,7 @@ public interface MatCalc<M> {
 	 * @param col column index
 	 * @return entry of matrix/vector at specified position
 	 */
-	public default double get(M m, int row, int col) {
+	 default double get(M m, int row, int col) {
 		return get(m, row*numCols(m)+col);
 	}
 
@@ -373,23 +373,23 @@ public interface MatCalc<M> {
 	 * @param m matrix/vector
 	 * @return a copy of the argument
 	 */
-	public M copy(M m);
+	 M copy(M m);
 	
 	/**
 	 * @param m matrix/vector
 	 * @return values of the matrix/vector in row major order */
-	public double[] toArray(M m);
+	 double[] toArray(M m);
 	
 	/**
 	 * @param m matrix/vector
 	 * @return values of the matrix/vector {@code ( values[row][col] )} */
-	public double[][] toArray2D(M m);
+	 double[][] toArray2D(M m);
 	
 	/**
 	 * @param m vector
 	 * @param thresh norm threshold for when a vector is considered to be 0 (and thus not normalized)
 	 * @return same as argument which was normalized in-place to unit length (if thresh smaller than norm) */
-	public default M normalize_inp(M m, double thresh) {
+	 default M normalize_inp(M m, double thresh) {
 		double norm = norm(m);
 		return norm < thresh ? m : scale_inp(m, 1/norm);
 	}
@@ -398,33 +398,33 @@ public interface MatCalc<M> {
 	 * @param m vector
 	 * @param thresh norm threshold for when a vector is considered to be 0 (and thus not normalized)
 	 * @return normalized to unit length version of vector (if thresh smaller than norm) */
-	public default M normalize(M m, double thresh) { return normalize_inp(copy(m), thresh); }
+	 default M normalize(M m, double thresh) { return normalize_inp(copy(m), thresh); }
 	
 	/**
 	 * @param m vector
 	 * @return same as argument which was normalized in place to unit length (if 1e-7 smaller than norm) */
-	public default M normalize_inp(M m) { return normalize_inp(m, 1e-7); }
+	 default M normalize_inp(M m) { return normalize_inp(m, 1e-7); }
 	
 	/**
 	 * @param m vector
 	 * @return normalized to unit length version of vector (if 1e-7 smaller than norm) */
-	public default M normalize(M m) { return normalize_inp(copy(m)); }
+	 default M normalize(M m) { return normalize_inp(copy(m)); }
 	
 	/**
 	 * @param v vector
 	 * @return squared vector norm ||v||^2 = ‹v,v› */
-	public default double norm2(M v) { return inner(v,v); }
+	 default double norm2(M v) { return inner(v,v); }
 	
 	/**
 	 * @param v vector
 	 * @return vector norm ||v|| = sqrt(‹v,v›) */
-	public default double norm(M v) { return Math.sqrt(norm2(v)); }
+	 default double norm(M v) { return Math.sqrt(norm2(v)); }
 
 	/**
 	 * @param m matrix
 	 * @return squared Frobenius norm of the matrix (sum of squared elements)
 	 */
-	public default double frob2(M m) {
+	 default double frob2(M m) {
 		return sum(elmmul(m, m));
 	}
 
@@ -432,7 +432,7 @@ public interface MatCalc<M> {
 	 * @param m matrix
 	 * @return Frobenius norm of the matrix (sqrt of sum of squared elements)
 	 */
-	public default double frob(M m) {
+	 default double frob(M m) {
 		return Math.sqrt(frob2(m));
 	}
 	
@@ -442,35 +442,35 @@ public interface MatCalc<M> {
 	 * @return singular value decomposition (full or sparse/economic) with matrices U,S,V where m=U*S*trp(V).
 	 * singular values are ordered from largest to smallest along the diagonal (largest at 0,0)
 	 */
-	public M[] svd(M m, boolean full);
+	 M[] svd(M m, boolean full);
 	
 	/**
 	 * @param m matrix
 	 * @returns Cholesky decomposition of m, the upper triangular part U, so that m = trp(U)*U */
-	public M cholesky(M m);
+	 M cholesky(M m);
 
 	/**
 	 * @param m matrix (symmetric)
 	 * @return eigendecomposition for symmetric matrices, with matrices Q,S where m = Q*S*Q^-1 (eigenvectors in columns of Q)
 	 */
-	public M[] symEvd(M m);
+	 M[] symEvd(M m);
 	
 	/**
 	 * @param m matrix
 	 * @return determinant of m */
-	public double det(M m);
+	 double det(M m);
 	
 	/**
 	 * @param m matrix
 	 * @return element-wise exp (in-place) */
-	public default M exp_inp(M m) {
+	 default M exp_inp(M m) {
 		return elemwise_inp(m, Math::exp);
 	}
 	
 	/**
 	 * @param m matrix
 	 * @return element wise sqrt (in-place) */
-	public default M sqrt_inp(M m) {
+	 default M sqrt_inp(M m) {
 		return elemwise_inp(m, Math::sqrt);
 	}
 	
@@ -478,7 +478,7 @@ public interface MatCalc<M> {
 	 * @param m matrix
 	 * @param f funtion to be applied to each element
 	 * @return element wise f(m_ij) (in-place) */
-	public default M elemwise_inp(M m, DoubleUnaryOperator f) {
+	 default M elemwise_inp(M m, DoubleUnaryOperator f) {
 		for(int i=0; i<numElem(m); i++)
 			set_inp(m, i, f.applyAsDouble(get(m, i)));
 		return m;
@@ -488,13 +488,13 @@ public interface MatCalc<M> {
 	 * @param a matrix/vector
 	 * @param b matrix/vector
 	 * @return side by side concatenation (equal number of rows) */
-	public M concatHorz(M a, M b);
+	 M concatHorz(M a, M b);
 	
 	/**
 	 * @param a matrix/vector
 	 * @param b matrix/vector
 	 * @return stacked concatenation (equal number of columns) */
-	public M concatVert(M a, M b);
+	 M concatVert(M a, M b);
 
 	/**
 	 * @param m matrix/vector
@@ -504,14 +504,14 @@ public interface MatCalc<M> {
 	 * @param cb column end (exclusive)
 	 * @return sub-matrix of rows ra to rb (exclusive) and columns ca to cb (exclusive)
 	 */
-	public M getRange(M m, int ra, int rb, int ca, int cb);
+	 M getRange(M m, int ra, int rb, int ca, int cb);
 
 	/**
 	 * @param m matrix/vector
 	 * @param r row index
 	 * @return row of m
 	 */
-	public default M getRow(M m, int r) {
+	 default M getRow(M m, int r) {
 		return getRange(m, r, r+1, 0, numCols(m));
 	}
 
@@ -520,26 +520,26 @@ public interface MatCalc<M> {
 	 * @param c column index
 	 * @return column of m
 	 */
-	public default M getCol(M m, int c) {
+	 default M getCol(M m, int c) {
 		return getRange(m, 0, numRows(m), c, c+1);
 	}
 	
 	/**
 	 * @param m matrix
 	 * @return the diagonal of the matrix as column vector */
-	public M diagV(M m);
+	 M diagV(M m);
 	
 	/**
 	 * @param v vector
 	 * @return the diagonal matrix from the vector (vector elements put on diagonal) */
-	public M diagM(M v);
+	 M diagM(M v);
 
 	/**
 	 * copies values of src to target (copies values in row-major order, matrices don't need to be of same size)
 	 * @param src source matrix
 	 * @param target target matrix
 	 */
-	public default void copyValues(M src, M target) {
+	 default void copyValues(M src, M target) {
 		copyValues(src, 0, target, 0, Math.min(numElem(src), numElem(target)));
 	}
 
@@ -552,7 +552,7 @@ public interface MatCalc<M> {
 	 * @param startTarget start index in target
 	 * @param len number of values to copy (row-major order)
 	 */
-	public default void copyValues(M src, int startSrc, M target, int startTarget, int len) {
+	 default void copyValues(M src, int startSrc, M target, int startTarget, int len) {
 		for(int i=0; i<len; i++)
 			set_inp(target, i+startTarget, get(src, i+startSrc));
 	}
@@ -561,21 +561,21 @@ public interface MatCalc<M> {
 	 * @param n array length
 	 * @return array of type M (since Java does not allow creation of generically typed arrays)
 	 */
-	public M[] matArray(int n);
+	 M[] matArray(int n);
 
 	/**
 	 * @param m outer array length
 	 * @param n inner array length
 	 * @return 2D array of type M (since Java does not allow creation of generically typed arrays)
 	 */
-	public M[][] matArray(int m, int n);
+	 M[][] matArray(int m, int n);
 
 	/**
 	 * @param a matrix/vector
 	 * @param b matrix/vector
 	 * @return matrix multiplication y=a*b
 	 */
-	public default M mult_ab(M a, M b) {
+	 default M mult_ab(M a, M b) {
 		return matmul(a, b);
 	}
 
@@ -584,14 +584,14 @@ public interface MatCalc<M> {
 	 * @param b matrix/vector
 	 * @return matrix multiplication y=trp(a)*b
 	 */
-	public M mult_aTb(M a, M b);
+	 M mult_aTb(M a, M b);
 
 	/**
 	 * @param a matrix/vector
 	 * @param b matrix/vector
 	 * @return matrix multiplication y=a*trp(b)
 	 */
-	public M mult_abT(M a, M b);
+	 M mult_abT(M a, M b);
 
 	/**
 	 * @param a matrix/vector
@@ -599,7 +599,7 @@ public interface MatCalc<M> {
 	 * @param c matrix/vector
 	 * @return matrix multiplication y=trp(a)*b*c
 	 */
-	public default M mult_aTbc(M a, M b, M c) {
+	 default M mult_aTbc(M a, M b, M c) {
 		return matmul(mult_aTb(a, b), c);
 	}
 
@@ -609,7 +609,7 @@ public interface MatCalc<M> {
 	 * @param c matrix/vector
 	 * @return matrix multiplication y=a*b*trp(c)
 	 */
-	public default M mult_abcT(M a, M b, M c) {
+	 default M mult_abcT(M a, M b, M c) {
 		return matmul(a, mult_abT(b, c));
 	}
 
@@ -619,7 +619,7 @@ public interface MatCalc<M> {
 	 * @param c matrix/vector
 	 * @return matrix multiplication y=a*trp(b)*c
 	 */
-	public default M mult_abTc(M a, M b, M c) {
+	 default M mult_abTc(M a, M b, M c) {
 		return matmul(a, mult_aTb(b, c));
 	}
 
@@ -627,14 +627,14 @@ public interface MatCalc<M> {
 	 * @param m matrix/vector
 	 * @return sum of elements
 	 */
-	public double sum(M m);
+	 double sum(M m);
 
 	/**
 	 * @param v1 vector
 	 * @param v2 vector
 	 * @return squared distance d=||v1-v2||^2
 	 */
-	public default double dist2(M v1, M v2) {
+	 default double dist2(M v1, M v2) {
 		double sum=0;
 		for(int i=0; i<numElem(v1); i++) {
 			double diff=get(v1, i)-get(v2, i);
@@ -649,7 +649,7 @@ public interface MatCalc<M> {
 	 * @return pairwise distances between rows of a and b.
 	 * Entry at (r,c) is distance between a_c and b_r.
 	 */
-	public default M pairwiseDistances2(M a, M b) {
+	 default M pairwiseDistances2(M a, M b) {
 		M dists = zeros(numRows(b), numRows(a));
 		for(int i=0; i<numRows(b); i++) {
 			M bi = getRow(b, i);
@@ -686,7 +686,7 @@ public interface MatCalc<M> {
 	 * @param toSort values to sort (will stay untouched)
 	 * @return order array of indices. smallest=toSort[order[0]], largest=toSort[order[toSort.length-1]]
 	 */
-	public static int[] argsort(final double[] toSort) {
+	 public static int[] argsort(final double[] toSort) {
 		Integer[] indices = IntStream.range(0, toSort.length).mapToObj(Integer::valueOf).toArray(Integer[]::new);
 		Arrays.sort(indices, (i,j)->Double.compare(toSort[i], toSort[j]));
 		return Arrays.stream(indices).mapToInt(Integer::intValue).toArray();
@@ -696,12 +696,28 @@ public interface MatCalc<M> {
 	 * @param m matrix
 	 * @return pseudo inverse of m
 	 */
-	public default M pinv(M m) {
+	 default M pinv(M m) {
 		M[] svd = svd(m, false);
 		M Sinv = diagM(elemwise_inp(diagV(svd[1]), v->1.0/v));
 		return mult_abcT(svd[2],Sinv,svd[0]);
 	}
-	
+
+	/**
+	 * converts a matrix of this {@link MatCalc} to a matrix for use with another MatCalc, e.g.
+	 * when using multiple linear algebra libraries.
+	 * @param m matrix
+	 * @param otherMC other MatrixCalculator
+	 * @param <Other> other matrix type
+	 * @return a copy of matrix m but as type of otherMC.
+	 */
+	 default <Other> Other convert(M m, MatCalc<Other> otherMC){
+		int rows = numRows(m), cols = numCols(m);
+		Other o = otherMC.zeros(rows,cols);
+		for(int i=0; i<rows*cols; i++){
+			otherMC.set_inp(o,i,get(m,i));
+		}
+		return o;
+	}
 }
 
 

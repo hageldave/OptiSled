@@ -11,6 +11,10 @@ import org.ejml.simple.ops.SimpleOperations_DDRM;
 
 import hageldave.optisled.generic.numerics.MatCalc;
 
+/**
+ * {@link MatCalc} implementation using {@link DMatrixRMaj} matrix type of
+ * Efficient Java Matrix Library (EJML).
+ */
 public class MatCalcEJML implements MatCalc<DMatrixRMaj> {
 	
 	static final SimpleOperations_DDRM ops = new SimpleOperations_DDRM();
