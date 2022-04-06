@@ -37,7 +37,7 @@ public class GradientDescent<M> {
 	 * when the algorithm's steps have decreased below this step size threshold
 	 * it terminates, thinking it has reached the minimum
 	 */
-	public double terminationStepSize = 1e-5;
+	public double terminationStepSize = 1e-8;
 	/**
 	 * maximum number of line search iterations 
 	 * (preventing infinite loops in ill conditioned problems) 

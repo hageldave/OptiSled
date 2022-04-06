@@ -644,6 +644,15 @@ import java.util.stream.IntStream;
 	}
 
 	/**
+	 * @param v1 vector
+	 * @param v2 vector
+	 * @return distance d=||v1-v2||
+	 */
+	default double dist(M v1, M v2) {
+		return Math.sqrt(dist2(v1,v2));
+	}
+
+	/**
 	 * @param a matrix of row vectors
 	 * @param b matrix of row vectors
 	 * @return pairwise distances between rows of a and b.

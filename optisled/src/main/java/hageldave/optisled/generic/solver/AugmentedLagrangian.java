@@ -16,7 +16,7 @@ import hageldave.optisled.history.DescentLog;
  */
 public class AugmentedLagrangian<M> {
 
-	public int maxNumIterations = 80;
+	public int maxNumIterations = 300;
 	public double muIncr = 1.01;
 	public double initialStepsize = 1.0;
 	

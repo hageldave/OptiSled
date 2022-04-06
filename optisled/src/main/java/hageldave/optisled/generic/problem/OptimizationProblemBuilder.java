@@ -93,13 +93,13 @@ public class OptimizationProblemBuilder<M> {
 			if(f instanceof ScalarFNWithGradient){
 				df = ((ScalarFNWithGradient<M>) f).gradient();
 			} else {
-				df = new NumericGradient<M>(f, mc);
+				df = new NumericGradient<M>(mc, f);
 			}
 		}
 		this.objective_deriv = Objects.requireNonNull(df);
 		return this;
 	}
-	
+
 	/**
 	 * adds constraint g(x) LEQ 0
 	 * @param g
@@ -112,7 +112,7 @@ public class OptimizationProblemBuilder<M> {
 			if(g instanceof ScalarFNWithGradient){
 				dg = ((ScalarFNWithGradient<M>) g).gradient();
 			} else {
-				dg = new NumericGradient<M>(g,mc);
+				dg = new NumericGradient<M>(mc, g);
 			}
 		}
 		this.constraint_derivs.add(Objects.requireNonNull(dg));

@@ -19,8 +19,8 @@ import hageldave.optisled.generic.problem.VectorFN;
 public class LogBarrier<M> {
 
 	public double initialMu = 8.0;
-	public double muDecr = 0.92;
-	public int maxNumIterations = 135;
+	public double muDecr = 0.95;
+	public int maxNumIterations = 300;
 	
 	public final MatCalc<M> mc;
 	
@@ -51,6 +51,7 @@ public class LogBarrier<M> {
 		do {
 			ScalarFNWithGradient<M> f = logBarrFN(p, mu, mc);
 			GradientDescent<M> gd = new GradientDescent<>(mc);
+			gd.maxDescentSteps = 100;
 			x = gd.arg_min(f, f.gradient(), x, null);
 			if(Objects.nonNull(trace)){
 				TrajectoryInfo info = new TrajectoryInfo();

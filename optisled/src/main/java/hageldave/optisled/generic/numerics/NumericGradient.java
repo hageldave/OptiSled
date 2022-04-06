@@ -5,12 +5,12 @@ import hageldave.optisled.generic.problem.VectorFN;
 
 public class NumericGradient<M> implements VectorFN<M> {
 
-	final ScalarFN<M> f;
 	final MatCalc<M> mc;
-	public double h = 0.0001;
+	final ScalarFN<M> f;
+	public double h = 1e-8;
 	public final NumericCentralGradient central = new NumericCentralGradient();
 	
-	public NumericGradient(ScalarFN<M> f, MatCalc<M> mc) {
+	public NumericGradient(MatCalc<M> mc, ScalarFN<M> f) {
 		this.f = f;
 		this.mc = mc;
 	}
