@@ -70,7 +70,7 @@ public class SanityTest {
 		// boundary constraint allowing only x-2 < 0 == x < 2
 		ScalarFN.ScalarFNWithGradient<M> boundary = ScalarFN.linear(mc, mc.vecOf(1.0, 0.0), -2.0);
 
-		OptimizationProblem<M> problem = OptimizationProblemBuilder.instance(2, mc)
+		OptimizationProblem<M> problem = OptimizationProblemBuilder.instance(mc,2)
 				.setObjective(fx, null)
 				.addIneqConstraint(boundary, null)
 				.build();
@@ -103,7 +103,7 @@ public class SanityTest {
 		// boundary constraint allowing only x-2 < 0 == x < 2
 		ScalarFN.ScalarFNWithGradient<M> boundary = ScalarFN.linear(mc, mc.vecOf(1.0, 0.0), -2.0);
 
-		OptimizationProblem<M> problem = OptimizationProblemBuilder.instance(2, mc)
+		OptimizationProblem<M> problem = OptimizationProblemBuilder.instance(mc, 2)
 				.setObjective(fx, null)
 				.addIneqConstraint(boundary, null)
 				.build();

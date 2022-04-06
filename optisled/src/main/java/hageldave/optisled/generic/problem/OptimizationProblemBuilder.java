@@ -64,7 +64,7 @@ public class OptimizationProblemBuilder<M> {
 		this.mc = mc;
 	}
 	
-	public static <M> OptimizationProblemBuilder<M> instance(int dim, MatCalc<M> mc) {
+	public static <M> OptimizationProblemBuilder<M> instance(MatCalc<M> mc, int dim) {
 		OptimizationProblemBuilder<M> b = new OptimizationProblemBuilder<>(mc);
 		b.dim = dim;
 		return b;

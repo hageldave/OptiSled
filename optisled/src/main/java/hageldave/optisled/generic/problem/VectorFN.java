@@ -18,7 +18,7 @@ public interface VectorFN<M> {
 		return x->c;
 	}
 	
-	public static <M> VectorFN<M> linear(final M transform, final M c, MatCalc<M> mc){
+	public static <M> VectorFN<M> linear(MatCalc<M> mc, final M transform, final M c){
 		return x->mc.add(mc.matmul(transform,x),c);
 	}
 }
