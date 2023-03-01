@@ -3,6 +3,10 @@ package hageldave.optisled.generic.numerics;
 import hageldave.optisled.generic.problem.ScalarFN;
 import hageldave.optisled.generic.problem.VectorFN;
 
+/**
+ * Computed gradient using finite differences
+ * @param <M> matrix type
+ */
 public class NumericGradient<M> implements VectorFN<M> {
 
 	final MatCalc<M> mc;
