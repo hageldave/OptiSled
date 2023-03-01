@@ -9,7 +9,7 @@ import hageldave.optisled.history.DescentLog;
 import hageldave.utils.Ref;
 
 /**
- * Stochastic Gradient descent implementation with line search (satisfying 1st Wolfe condition in each step).
+ * Stochastic Gradient descent implementation with Adam.
  * <p>
  * Stochasticity has to be realized through the {@link #randRef} object which holds a random number which is 
  * changing in each iteration (change events are fired and can be listened to).
@@ -20,8 +20,35 @@ import hageldave.utils.Ref;
  * Descent is run by calling {@link #arg_min(ScalarFN, VectorFN, M, DescentLog)}.
  * @param <M> matrix type
  */
-public class StochasticGradientDescent<M> extends GradientDescent<M> {
+public class AdamGradientDescent<M> {
+
+	public double beta1 = 0.9;
 	
+	public double beta2 = 0.999;
+	/**
+	 * initial step size the algorithm starts with
+	 */
+	public double initialStepSize = 1.0;
+	/**
+	 * when the algorithm's steps have decreased below this step size threshold
+	 * it terminates, thinking it has reached the minimum
+	 */
+	public double terminationStepSize = 1e-8;
+	/**
+	 * maximum number of descent steps to take
+	 * (preventing infinite loops in ill conditioned problems) 
+	 */
+	public int maxDescentSteps = 100;
+
+	/** the step size of gd when argmin terminated */
+	public double stepSizeOnTermination;
+
+	/** the matrix calculation object for the matrix type M */
+	public final MatCalc<M> mc;
+
+	/** the loss when arg_min terminates */
+	public double lossOnTermination;
+
 	/** RNG, used to generate a new number on each iteration  */
 	public Random rand;
 	/** 
@@ -37,8 +64,8 @@ public class StochasticGradientDescent<M> extends GradientDescent<M> {
 	 * specified matrix calculator.
 	 * @param mc matrix calculator to perform linear algebra calculations
 	 */
-	public StochasticGradientDescent(MatCalc<M> mc) {
-		super(mc);
+	public AdamGradientDescent(MatCalc<M> mc) {
+		this.mc=mc;
 		this.rand = new Random();
 	}
 
@@ -57,37 +84,35 @@ public class StochasticGradientDescent<M> extends GradientDescent<M> {
 		//
 		double fx;
 		M dfx;
-		M d;
 		M step;
+		// adam things
+		M m = mc.scale(x, 0.0);
+		M v = mc.scale(x, 0.0);
 		do {
 			int r = rand.nextInt(Integer.MAX_VALUE);
 			if(randRef != null) 
 				randRef.set(r);
 			fx = f.evaluate(x);
 			dfx = df.evaluate(x);
-			d = mc.normalize_inp(mc.scale(dfx, -1.0));
+			
+			m = mc.add(mc.scale(m, beta1) , mc.scale(dfx, 1.0-beta1));
+			v = mc.add(mc.scale(v, beta2) , mc.scale(mc.elmmul(dfx,dfx), 1.0-beta2));
+			
+			double alpha = a * Math.sqrt(1-Math.pow(beta2, numSteps+1)) / (1-Math.pow(beta1, numSteps+1));
+			step = mc.elemwise_inp(v, AdamGradientDescent::divBySqrtSanitized);
+			step = mc.scale(mc.elmmul(m, step), -alpha);
+			
 			if(log != null) {
 				log.position(mc.toArray(x));
 				log.loss(fx);
-				log.direction(mc.toArray(d));
-				log.stepSize(a);
+				log.direction(mc.toArray(dfx));
+				log.stepSize(alpha);
 			}
-			// perform line search
-			int numLinsrchIter = 0;
-			// while( f(x+a*d) > f(x) + df(x)'a*d*l ) 1st wolfe condition
-			while( 
-					f.evaluate(mc.add(x, step=mc.scale(d,a))) > fx + mc.inner(dfx,step)*lineSearchFactor
-					&& numLinsrchIter++ < maxLineSearchIter
-			){
-				a *= stepDecr;
-				if(log != null)
-					log.stepSize(a);
-			}
+			
 			// update location
 			x = mc.add(x,step);
-			stepSizeOnTermination = a;
-			a *= stepIncr;
-		} while( ++numSteps < maxDescentSteps && mc.norm(step) > terminationStepSize );
+			stepSizeOnTermination = mc.norm(step);
+		} while( ++numSteps < maxDescentSteps &&  stepSizeOnTermination > terminationStepSize );
 
 		this.lossOnTermination = f.evaluate(x);
 		if(log != null) {
@@ -98,4 +123,7 @@ public class StochasticGradientDescent<M> extends GradientDescent<M> {
 		return x;
 	}
 	
+	private static double divBySqrtSanitized(double val) {
+		return 1.0/(Math.sqrt(val) + 1e-9);
+	}
 }
