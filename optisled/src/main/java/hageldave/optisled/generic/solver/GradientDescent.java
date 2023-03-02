@@ -7,7 +7,7 @@ import hageldave.optisled.history.DescentLog;
 
 /**
  * Gradient descent implementation with line search (satisfying 1st Wolfe condition in each step).
- * Descent is run by calling {@link #arg_min(ScalarFN, VectorFN, M, DescentLog)}.
+ * Descent is run by calling {@link #arg_min(ScalarFN, VectorFN, Object, DescentLog)}.
  * @param <M> matrix type
  */
 public class GradientDescent<M> {

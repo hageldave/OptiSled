@@ -14,10 +14,10 @@ import hageldave.utils.Ref;
  * Stochasticity has to be realized through the {@link #randRef} object which holds a random number which is 
  * changing in each iteration (change events are fired and can be listened to).
  * When the random number changes, the objective function and gradient, that were passed to 
- * {@link #arg_min(ScalarFN, VectorFN, Object)}, need to change behavior to only correspond to a subset of
+ * {@link #arg_min(ScalarFN, VectorFN, Object, DescentLog)}, need to change behavior to only correspond to a subset of
  * the dimensions (based on the random number).
  * <p>
- * Descent is run by calling {@link #arg_min(ScalarFN, VectorFN, M, DescentLog)}.
+ * Descent is run by calling {@link #arg_min(ScalarFN, VectorFN, Object, DescentLog)}.
  * @param <M> matrix type
  */
 public class StochasticGradientDescent<M> extends GradientDescent<M> {

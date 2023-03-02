@@ -12,7 +12,7 @@ import java.util.stream.IntStream;
  * of a linear algebra library, and makes it possible to 
  * integrate this API into environments where a matrix
  * type is already present.
- * <p></p>
+ * <p>
  * This collection of methods is by no means complete, but it contains
  * some of the more frequently used routines in linear algebra besides the basic operations,
  * such as EVD, SVD, Cholesky, pairwise distances, and some more.
@@ -497,7 +497,7 @@ import java.util.stream.IntStream;
 	
 	/**
 	 * @param m matrix
-	 * @returns Cholesky decomposition of m, the upper triangular part U, so that m = trp(U)*U */
+	 * @return Cholesky decomposition of m, the upper triangular part U, so that m = trp(U)*U */
 	 M cholesky(M m);
 
 	/**

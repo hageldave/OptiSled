@@ -4,7 +4,7 @@
 
 	<groupId>com.github.hageldave.optisled</groupId>
 	<artifactId>optisled</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.1</version>
 
 	<name>OptiSled</name>
 	<url>https://github.com/hageldave/OptiSled</url>
@@ -68,6 +68,7 @@
 
 	<profiles>
 		<!-- Release Artifact to Nexus -->
+		<!-- use: mvn clean deploy -P release -->
 		<profile>
 			<id>release</id>
 			<build>
@@ -101,6 +102,9 @@
 								<goals>
 									<goal>jar</goal>
 								</goals>
+								<configuration>
+                					<doclint>all,-missing</doclint>
+            					</configuration>
 							</execution>
 						</executions>
 					</plugin>
@@ -125,7 +129,7 @@
 					<plugin>
 						<groupId>org.sonatype.plugins</groupId>
 						<artifactId>nexus-staging-maven-plugin</artifactId>
-						<version>1.6.8</version>
+						<version>1.6.13</version>
 						<extensions>true</extensions>
 						<configuration>
 							<serverId>ossrh</serverId>
