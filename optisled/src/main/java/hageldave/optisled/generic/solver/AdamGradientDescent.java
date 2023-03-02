@@ -96,11 +96,11 @@ public class AdamGradientDescent<M> {
 			dfx = df.evaluate(x);
 			
 			m = mc.add(mc.scale(m, beta1) , mc.scale(dfx, 1.0-beta1));
-			v = mc.add(mc.scale(v, beta2) , mc.scale(mc.elmmul(dfx,dfx), 1.0-beta2));
+			v = mc.add(mc.scale(v, beta2) , mc.scale(mc.elemmul(dfx,dfx), 1.0-beta2));
 			
 			double alpha = a * Math.sqrt(1-Math.pow(beta2, numSteps+1)) / (1-Math.pow(beta1, numSteps+1));
 			step = mc.elemwise_inp(v, AdamGradientDescent::divBySqrtSanitized);
-			step = mc.scale(mc.elmmul(m, step), -alpha);
+			step = mc.scale(mc.elemmul(m, step), -alpha);
 			
 			if(log != null) {
 				log.position(mc.toArray(x));

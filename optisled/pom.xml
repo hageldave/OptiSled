@@ -9,7 +9,8 @@
 	<name>OptiSled</name>
 	<url>https://github.com/hageldave/OptiSled</url>
 	<description>
-		Nonlinear constraint optimizer
+		Optimization library featuring descent algorithms
+		and solvers for nonlinear constraint problems.
 	</description>
 
 	<licenses>
@@ -71,6 +72,21 @@
 			<id>release</id>
 			<build>
 				<plugins>
+					<!-- include source in jar -->
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-source-plugin</artifactId>
+						<version>3.2.1</version>
+						<executions>
+							<execution>
+								<id>attach-sources</id>
+								<goals>
+									<goal>jar</goal>
+								</goals>
+							</execution>
+						</executions>
+					</plugin>
+
 					<!-- include javadocs in jar -->
 					<plugin>
 						<groupId>org.apache.maven.plugins</groupId>

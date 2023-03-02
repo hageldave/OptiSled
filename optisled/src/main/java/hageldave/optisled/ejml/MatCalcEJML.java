@@ -94,9 +94,16 @@ public class MatCalcEJML implements MatCalc<DMatrixRMaj> {
 	}
 	
 	@Override
-	public DMatrixRMaj elmmul(DMatrixRMaj a, DMatrixRMaj b) {
+	public DMatrixRMaj elemmul(DMatrixRMaj a, DMatrixRMaj b) {
 		DMatrixRMaj c = a.copy();
 		ops.elementMult(a, b, c);
+		return c;
+	}
+	
+	@Override
+	public DMatrixRMaj elemdiv(DMatrixRMaj a, DMatrixRMaj b) {
+		DMatrixRMaj c = a.copy();
+		ops.elementDiv(a, b, c);
 		return c;
 	}
 	
@@ -141,6 +148,7 @@ public class MatCalcEJML implements MatCalc<DMatrixRMaj> {
 	public DMatrixRMaj mulRowsByColVec(DMatrixRMaj m, DMatrixRMaj colV) {
 		DMatrixRMaj copy = m.copy();
 		CommonOps_DDRM.multRows(toArray(colV), copy);
+		
 		return copy;
 	}
 	
@@ -212,6 +220,12 @@ public class MatCalcEJML implements MatCalc<DMatrixRMaj> {
 	
 	@Override
 	public DMatrixRMaj add_inp(DMatrixRMaj a, DMatrixRMaj b) {
+		ops.plus(a, b, a);
+		return a;
+	}
+	
+	@Override
+	public DMatrixRMaj add_inp(DMatrixRMaj a, double b) {
 		ops.plus(a, b, a);
 		return a;
 	}

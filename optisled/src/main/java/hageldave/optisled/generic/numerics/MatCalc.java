@@ -57,6 +57,23 @@ import java.util.stream.IntStream;
 	 * @return matrix of zeros of specified size
 	 */
 	 M zeros(int rows, int columns);
+	 
+	 /**
+	  * @param n number of dimensions
+	  * @return column vector of ones of dimension {@code n}
+	  */
+	 default M ones(int n) {
+		 return ones(n,1);
+	 }
+
+	 /** 
+	  * @param rows number of rows
+	  * @param columns number of columns
+	  * @return matrix of ones of specified size
+	  */
+	 default M ones(int rows, int columns) {
+		 return add_inp(zeros(rows, columns), 1.0);
+	 }
 	
 	/**
 	 * @param n number of rows (=number of columns)
@@ -186,8 +203,26 @@ import java.util.stream.IntStream;
 	 * @param a matrix/vector
 	 * @param b matrix/vector
 	 * @return element-wise multiplication of a and b (need to be of same size)
+	 * @deprecated 'elmmul' is a typo, supposed to be 'elemmul'. Use {@link #elemmul(Object, Object)} instead. 
 	 */
-	 M elmmul(M a, M b);
+	 @Deprecated
+	 default M elmmul(M a, M b) {
+		 return elemmul(a, b);
+	 }
+	 
+	 /**
+	  * @param a matrix/vector
+	  * @param b matrix/vector
+	  * @return element-wise multiplication of a and b (need to be of same size) 
+	  */
+	 M elemmul(M a, M b);
+	 
+	 /**
+	  * @param a matrix/vector
+	  * @param b matrix/vector
+	  * @return element-wise division of a and b (need to be of same size) 
+	  */
+	 M elemdiv(M a, M b);
 	
 	/**
 	 * @param m matrix
@@ -316,6 +351,13 @@ import java.util.stream.IntStream;
 	 * @return a=a+b (in-place addition to a, need to be same size)
 	 */
 	 M add_inp(M a, M b);
+	 
+	 /**
+	  * @param a matrix/vector
+	  * @param b scalar
+	  * @return a=a+b (in-place addition to a)
+	  */
+	 M add_inp(M a, double b);
 	
 	/**
 	 * @param a matrix/vector
@@ -323,6 +365,15 @@ import java.util.stream.IntStream;
 	 * @return a=a-b (in-place subtraction from a, need to be same size)
 	 */
 	 M sub_inp(M a, M b);
+
+	 /**
+	  * @param a matrix/vector
+	  * @param b scalar
+	  * @return a=a-b (in-place subtraction from a)
+	  */
+	 default M sub_inp(M a, double b) {
+		 return add_inp(a, -b);
+	 }
 	
 	/**
 	 * @param a matrix/vector
