@@ -2,6 +2,7 @@ package hageldave.utils;
 
 import java.util.LinkedList;
 import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 /** Pointer/Reference class. With notification ability */
 public final class Ref<T> {
@@ -32,6 +33,10 @@ public final class Ref<T> {
 	
 	public static <T> Ref<T> of(T r){
 		return new Ref<>(r);
+	}
+	
+	public synchronized BiConsumer<T,T> addListener(Consumer<T> l){
+		return addListener( (prev,curr)->l.accept(curr) );
 	}
 	
 	public synchronized BiConsumer<T,T> addListener(BiConsumer<T,T> l){
