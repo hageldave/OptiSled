@@ -21,30 +21,40 @@ import hageldave.utils.Ref;
  * @param <M> matrix type
  */
 public class AdamGradientDescent<M> {
-
+	
 	/**
 	 * exponential decay of first moment.
 	 */
-	public double beta1 = 0.9;
-	
+	public static final String PARAM_BETA1 = "BETA1";
 	/**
 	 * exponential decay of second moment.
 	 */
-	public double beta2 = 0.999;
+	public static final String PARAM_BETA2 = "BETA2";
 	/**
-	 * initial step size the algorithm starts with
+	 * step size (alpha)
 	 */
-	public double initialStepSize = 1.0;
+	public static final String PARAM_STEPSIZE = "STEPSIZE";
 	/**
 	 * when the algorithm's steps have decreased below this step size threshold
 	 * it terminates, thinking it has reached the minimum
 	 */
-	public double terminationStepSize = 1e-8;
+	public static final String PARAM_TERMINATION_STEPSIZE = "TERMINATION_STEPSIZE";
 	/**
 	 * maximum number of descent steps to take
 	 * (preventing infinite loops in ill conditioned problems) 
 	 */
-	public int maxDescentSteps = 100;
+	public static final String PARAM_MAX_ITERATIONS = "MAX_ITERATIONS";
+	
+	public static class HyperParamsAdam extends HyperParams {
+		{
+			set(PARAM_BETA1, 0.9);
+			set(PARAM_BETA2, 0.999);
+			set(PARAM_STEPSIZE, 1.0);
+			set(PARAM_MAX_ITERATIONS, 100);
+		}
+	}
+	
+	public HyperParamsAdam hyperParams = new HyperParamsAdam();
 
 	/** the step size of gd when argmin terminated */
 	public double stepSizeOnTermination;
@@ -84,7 +94,14 @@ public class AdamGradientDescent<M> {
 	 * @return location of minimum
 	 */
 	public M arg_min(ScalarFN<M> f, VectorFN<M> df, M initialGuess, DescentLog log){
-		double a = initialStepSize;
+		// get hyperparams
+		double a = hyperParams.getOrDefault(PARAM_STEPSIZE, 1.0);
+		double beta1 = hyperParams.getOrDefault(PARAM_BETA1, 0.9);
+		double beta2 = hyperParams.getOrDefault(PARAM_BETA2, 0.999);
+		double terminationStepSize = hyperParams.getOrDefault(PARAM_TERMINATION_STEPSIZE, 1e-8);
+		int maxIter = hyperParams.getOrDefault(PARAM_MAX_ITERATIONS, 100);
+		
+		
 		M x = mc.copy(initialGuess);
 		int numSteps = 0;
 		//
@@ -104,7 +121,7 @@ public class AdamGradientDescent<M> {
 			m = mc.add(mc.scale(m, beta1) , mc.scale(dfx, 1.0-beta1));
 			v = mc.add(mc.scale(v, beta2) , mc.scale(mc.elemmul(dfx,dfx), 1.0-beta2));
 			
-			double alpha = a * Math.sqrt(1-Math.pow(beta2, numSteps+1)) / (1-Math.pow(beta1, numSteps+1));
+			double alpha = a * (Math.sqrt(1-Math.pow(beta2, numSteps+1)) / (1-Math.pow(beta1, numSteps+1)));
 			step = mc.elemwise_inp(v, AdamGradientDescent::divBySqrtSanitized);
 			step = mc.scale(mc.elemmul(m, step), -alpha);
 			
@@ -118,7 +135,7 @@ public class AdamGradientDescent<M> {
 			// update location
 			x = mc.add(x,step);
 			stepSizeOnTermination = mc.norm(step);
-		} while( ++numSteps < maxDescentSteps &&  stepSizeOnTermination > terminationStepSize );
+		} while( ++numSteps < maxIter &&  stepSizeOnTermination > terminationStepSize );
 
 		this.lossOnTermination = f.evaluate(x);
 		if(log != null) {
