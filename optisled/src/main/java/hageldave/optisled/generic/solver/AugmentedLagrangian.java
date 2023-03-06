@@ -51,7 +51,7 @@ public class AugmentedLagrangian<M> {
 			
 			ScalarFNWithGradient<M> f = augLagrangian(p, lambda, mu, mc);
 			GradientDescent<M> gd = new GradientDescent<>(mc);
-			gd.initialStepSize = initialStepsize;
+			gd.hyperparams.set(GradientDescent.PARAM_INIT_STEPSIZE, initialStepsize);
 			DescentLog descentLog = null; // TODO: conditionally create a descent log
 			x = gd.arg_min(f, f.gradient(), x, descentLog);
 			

@@ -22,6 +22,16 @@ import hageldave.utils.Ref;
  */
 public class AdamGradientDescent<M> {
 	
+	public static class HyperparamsAdam extends Hyperparams {
+		{
+			set(PARAM_BETA1, 0.9);
+			set(PARAM_BETA2, 0.999);
+			set(PARAM_STEP_SCALING, 1.0);
+			set(PARAM_TERMINATION_STEPSIZE, 1e-8);
+			set(PARAM_MAX_ITERATIONS, 100);
+		}
+	}
+	
 	/**
 	 * exponential decay of first moment.
 	 */
@@ -33,7 +43,7 @@ public class AdamGradientDescent<M> {
 	/**
 	 * step size (alpha)
 	 */
-	public static final String PARAM_STEPSIZE = "STEPSIZE";
+	public static final String PARAM_STEP_SCALING = "STEP_SCALING";
 	/**
 	 * when the algorithm's steps have decreased below this step size threshold
 	 * it terminates, thinking it has reached the minimum
@@ -45,22 +55,16 @@ public class AdamGradientDescent<M> {
 	 */
 	public static final String PARAM_MAX_ITERATIONS = "MAX_ITERATIONS";
 	
-	public static class HyperParamsAdam extends HyperParams {
-		{
-			set(PARAM_BETA1, 0.9);
-			set(PARAM_BETA2, 0.999);
-			set(PARAM_STEPSIZE, 1.0);
-			set(PARAM_MAX_ITERATIONS, 100);
-		}
-	}
+	//
 	
-	public HyperParamsAdam hyperParams = new HyperParamsAdam();
-
-	/** the step size of gd when argmin terminated */
-	public double stepSizeOnTermination;
+	/** the hyperparameters for Adam */
+	public HyperparamsAdam hyperparams = new HyperparamsAdam();
 
 	/** the matrix calculation object for the matrix type M */
 	public final MatCalc<M> mc;
+	
+	/** the step size of gd when argmin terminated */
+	public double stepSizeOnTermination;
 
 	/** the loss when arg_min terminates */
 	public double lossOnTermination;
@@ -95,11 +99,11 @@ public class AdamGradientDescent<M> {
 	 */
 	public M arg_min(ScalarFN<M> f, VectorFN<M> df, M initialGuess, DescentLog log){
 		// get hyperparams
-		double a = hyperParams.getOrDefault(PARAM_STEPSIZE, 1.0);
-		double beta1 = hyperParams.getOrDefault(PARAM_BETA1, 0.9);
-		double beta2 = hyperParams.getOrDefault(PARAM_BETA2, 0.999);
-		double terminationStepSize = hyperParams.getOrDefault(PARAM_TERMINATION_STEPSIZE, 1e-8);
-		int maxIter = hyperParams.getOrDefault(PARAM_MAX_ITERATIONS, 100);
+		double a = hyperparams.getOrDefault(PARAM_STEP_SCALING, 1.0);
+		double beta1 = hyperparams.getOrDefault(PARAM_BETA1, 0.9);
+		double beta2 = hyperparams.getOrDefault(PARAM_BETA2, 0.999);
+		double terminationStepSize = hyperparams.getOrDefault(PARAM_TERMINATION_STEPSIZE, 1e-8);
+		int maxIter = hyperparams.getOrDefault(PARAM_MAX_ITERATIONS, 100);
 		
 		
 		M x = mc.copy(initialGuess);

@@ -2,7 +2,7 @@ package hageldave.optisled.generic.solver;
 
 import java.util.HashMap;
 
-public class HyperParams {
+public class Hyperparams {
 	protected HashMap<String, Object> paramMap = new HashMap<>();
 	
 	@SuppressWarnings("unchecked")

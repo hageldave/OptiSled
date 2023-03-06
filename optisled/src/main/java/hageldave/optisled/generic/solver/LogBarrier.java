@@ -51,7 +51,7 @@ public class LogBarrier<M> {
 		do {
 			ScalarFNWithGradient<M> f = logBarrFN(p, mu, mc);
 			GradientDescent<M> gd = new GradientDescent<>(mc);
-			gd.maxDescentSteps = 100;
+			gd.hyperparams.set(GradientDescent.PARAM_MAX_ITERATIONS, 100);
 			x = gd.arg_min(f, f.gradient(), x, null);
 			if(Objects.nonNull(trace)){
 				TrajectoryInfo info = new TrajectoryInfo();

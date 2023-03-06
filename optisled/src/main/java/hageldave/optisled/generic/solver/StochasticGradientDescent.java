@@ -51,7 +51,16 @@ public class StochasticGradientDescent<M> extends GradientDescent<M> {
 	 * @return location of minimum
 	 */
 	public M arg_min(ScalarFN<M> f, VectorFN<M> df, M initialGuess, DescentLog log){
-		double a = initialStepSize;
+		// hyperparameters
+		double a = hyperparams.getOrDefault(PARAM_INIT_STEPSIZE, 1.0);
+		double stepDecr = hyperparams.getOrDefault(PARAM_STEP_DECR, 0.5);
+		double stepIncr = hyperparams.getOrDefault(PARAM_STEP_INCR, 1.2);
+		double terminationStepSize = hyperparams.getOrDefault(PARAM_TERMINATION_STEPSIZE, 1e-8);
+		double lineSearchFactor = hyperparams.getOrDefault(PARAM_LINESEARCH_FACTOR, 0.01);
+		int maxDescentSteps = hyperparams.getOrDefault(PARAM_MAX_ITERATIONS, 100);
+		int maxLineSearchIter = hyperparams.getOrDefault(PARAM_MAX_LINESEARCH_ITER, 20);
+
+		
 		M x = mc.copy(initialGuess);
 		int numSteps = 0;
 		//
