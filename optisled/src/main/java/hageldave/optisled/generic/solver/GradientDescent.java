@@ -148,4 +148,9 @@ public class GradientDescent<M> implements DescentAlgorithm<M> {
 		return x;
 	}
 	
+	@Override
+	public double getLoss() {
+		return this.lossOnTermination;
+	}
+	
 }

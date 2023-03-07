@@ -153,6 +153,11 @@ public class AdamGradientDescent<M> implements DescentAlgorithm<M> {
 		return x;
 	}
 	
+	@Override
+	public double getLoss() {
+		return this.lossOnTermination;
+	}
+	
 	private static double divBySqrtSanitized(double val) {
 		return 1.0/(Math.sqrt(val) + 1e-9);
 	}

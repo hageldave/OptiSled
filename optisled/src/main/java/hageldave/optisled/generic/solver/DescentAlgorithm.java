@@ -37,4 +37,9 @@ public interface DescentAlgorithm<M> {
 	 */
 	public void setHyperparams(Hyperparams params);
 	
+	/**
+	 * @return the loss (value of objective function) when descent terminated and arg_min returned.
+	 */
+	public double getLoss();
+	
 }
