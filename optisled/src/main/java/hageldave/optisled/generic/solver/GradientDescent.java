@@ -10,7 +10,7 @@ import hageldave.optisled.history.DescentLog;
  * Descent is run by calling {@link #arg_min(ScalarFN, VectorFN, Object, DescentLog)}.
  * @param <M> matrix type
  */
-public class GradientDescent<M> {
+public class GradientDescent<M> implements DescentAlgorithm<M> {
 	
 	public static class HyperparamsGD extends Hyperparams {
 		{
@@ -63,7 +63,7 @@ public class GradientDescent<M> {
 	// 
 
 	/** the hyperparameters for gradient descent with adaptive step size (through line search) */
-	public HyperparamsGD hyperparams = new HyperparamsGD();
+	public Hyperparams hyperparams = new HyperparamsGD();
 	
 	/** the matrix calculation object for the matrix type M */
 	public final MatCalc<M> mc;
@@ -82,26 +82,18 @@ public class GradientDescent<M> {
 	public GradientDescent(MatCalc<M> mc) {
 		this.mc = mc;
 	}
-
-	/**
-	 * finds argmin by performing gradient descent
-	 * @param f function to be minimized
-	 * @param df gradient of the function
-	 * @param initialGuess initialization (guess of minimum location)
-	 * @return location of minimum
-	 */
-	public M arg_min(ScalarFN<M> f, VectorFN<M> df, M initialGuess){
-		return this.arg_min(f,df,initialGuess,null);
+	
+	@Override
+	public Hyperparams getHyperparams() {
+		return this.hyperparams;
+	}
+	
+	@Override
+	public void setHyperparams(Hyperparams hyperparams) {
+		this.hyperparams = hyperparams;
 	}
 
-	/**
-	 * finds argmin by performing gradient descent
-	 * @param f function to be minimized
-	 * @param df gradient of the function
-	 * @param initialGuess initialization (guess of minimum location)
-	 * @param log optional log object for recording the optimization trajectory (can be null)
-	 * @return location of minimum
-	 */
+	@Override
 	public M arg_min(ScalarFN<M> f, VectorFN<M> df, M initialGuess, DescentLog log){
 		// hyperparameters
 		double a = hyperparams.getOrDefault(PARAM_INIT_STEPSIZE, 1.0);

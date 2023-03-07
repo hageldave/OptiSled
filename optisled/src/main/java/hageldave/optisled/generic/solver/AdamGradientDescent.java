@@ -20,7 +20,7 @@ import hageldave.utils.Ref;
  * Descent is run by calling {@link #arg_min(ScalarFN, VectorFN, Object, DescentLog)}.
  * @param <M> matrix type
  */
-public class AdamGradientDescent<M> {
+public class AdamGradientDescent<M> implements DescentAlgorithm<M> {
 	
 	public static class HyperparamsAdam extends Hyperparams {
 		{
@@ -58,7 +58,7 @@ public class AdamGradientDescent<M> {
 	//
 	
 	/** the hyperparameters for Adam */
-	public HyperparamsAdam hyperparams = new HyperparamsAdam();
+	public Hyperparams hyperparams = new HyperparamsAdam();
 
 	/** the matrix calculation object for the matrix type M */
 	public final MatCalc<M> mc;
@@ -88,15 +88,18 @@ public class AdamGradientDescent<M> {
 		this.mc=mc;
 		this.rand = new Random();
 	}
+	
+	@Override
+	public Hyperparams getHyperparams() {
+		return this.hyperparams;
+	}
+	
+	@Override
+	public void setHyperparams(Hyperparams hyperparams) {
+		this.hyperparams = hyperparams;
+	}
 
-	/**
-	 * finds argmin by performing gradient descent
-	 * @param f function to be minimized
-	 * @param df gradient of the function
-	 * @param initialGuess initialization (guess of minimum location)
-	 * @param log optional log object for recording the optimization trajectory (can be null)
-	 * @return location of minimum
-	 */
+	@Override
 	public M arg_min(ScalarFN<M> f, VectorFN<M> df, M initialGuess, DescentLog log){
 		// get hyperparams
 		double a = hyperparams.getOrDefault(PARAM_STEP_SCALING, 1.0);

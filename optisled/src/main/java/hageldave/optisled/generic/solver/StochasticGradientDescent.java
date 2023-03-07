@@ -42,14 +42,7 @@ public class StochasticGradientDescent<M> extends GradientDescent<M> {
 		this.rand = new Random();
 	}
 
-	/**
-	 * finds argmin by performing gradient descent
-	 * @param f function to be minimized
-	 * @param df gradient of the function
-	 * @param initialGuess initialization (guess of minimum location)
-	 * @param log optional log object for recording the optimization trajectory (can be null)
-	 * @return location of minimum
-	 */
+	@Override
 	public M arg_min(ScalarFN<M> f, VectorFN<M> df, M initialGuess, DescentLog log){
 		// hyperparameters
 		double a = hyperparams.getOrDefault(PARAM_INIT_STEPSIZE, 1.0);
