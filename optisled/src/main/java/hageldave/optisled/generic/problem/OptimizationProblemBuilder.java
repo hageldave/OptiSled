@@ -83,7 +83,7 @@ public class OptimizationProblemBuilder<M> {
 	
 	/**
 	 * sets objective function to minimize
-	 * @param f
+	 * @param f objective function
 	 * @param df optional gradient (can be null)
 	 * @return this for chaining
 	 */
@@ -102,7 +102,7 @@ public class OptimizationProblemBuilder<M> {
 
 	/**
 	 * adds constraint g(x) LEQ 0
-	 * @param g
+	 * @param g constraint function
 	 * @param dg optional gradient (can be null)
 	 * @return this for chaining
 	 */

@@ -114,7 +114,7 @@ import java.util.stream.IntStream;
 	}
 	
 	/**
-	 * @param n
+	 * @param n number of elements (rows)
 	 * @return column vector of random values in range 0.0 .. 1.0
 	 */
 	 default M rand(int n) {
@@ -171,7 +171,7 @@ import java.util.stream.IntStream;
 	 double inner(M a, M b);
 	
 	/**
-	 * just an alias for {@link #inner(M, M)}
+	 * just an alias for {@link #inner(Object, Object)}
 	 * @param a vector 
 	 * @param b vector
 	 * @return inner or dot product for given vectors ‹a,b›
