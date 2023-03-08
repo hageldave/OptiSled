@@ -8,7 +8,7 @@ Features gradient descent and nonlinear constraint optimization via log-barrier 
 <dependency>
     <groupId>com.github.hageldave.optisled</groupId>
     <artifactId>optisled</artifactId>
-    <version>0.0.1</version>
+    <version>0.0.2</version>
 </dependency>
 ```
 This library is shipped as an [Apache Maven](https://maven.apache.org/what-is-maven.html) artifact.
