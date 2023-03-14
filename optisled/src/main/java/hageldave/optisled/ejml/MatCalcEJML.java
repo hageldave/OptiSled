@@ -47,14 +47,16 @@ public class MatCalcEJML implements MatCalc<DMatrixRMaj> {
 	@Override
 	public DMatrixRMaj eye(int n, double s) {
 		DMatrixRMaj eye = eye(n);
-		ops.scale(eye, s, eye);
+		// ops.scale(eye, s, eye);
+		CommonOps_DDRM.scale(s, eye, eye);
 		return eye;
 	}
 	
 	@Override
 	public DMatrixRMaj eye(int n) {
 		DMatrixRMaj m = zeros(n, n);
-		ops.setIdentity(m);
+//		ops.setIdentity(m);
+		CommonOps_DDRM.setIdentity(m);
 		return m;
 	}
 
@@ -70,40 +72,43 @@ public class MatCalcEJML implements MatCalc<DMatrixRMaj> {
 
 	@Override
 	public double inner(DMatrixRMaj a, DMatrixRMaj b) {
-		return ops.dot(a, b);
+//		return ops.dot(a, b);
+		return CommonOps_DDRM.dot(a, b);
 	}
 
 	@Override
 	public DMatrixRMaj scale(DMatrixRMaj m, double s) {
-		DMatrixRMaj copy = m.copy();
-		ops.scale(m, s, copy);
-		return copy;
+		return scale_inp(copy(m), s);
 	}
 
 	@Override
 	public DMatrixRMaj scale_inp(DMatrixRMaj m, double s) {
-		ops.scale(m, s, m);
+//		ops.scale(m, s, m);
+		CommonOps_DDRM.scale(s, m, m);
 		return m;
 	}
 
 	@Override
 	public DMatrixRMaj matmul(DMatrixRMaj a, DMatrixRMaj b) {
 		DMatrixRMaj c = zeros(a.numRows, b.numCols);
-		ops.mult(a, b, c);
+//		ops.mult(a, b, c);
+		CommonOps_DDRM.mult(a, b, c);
 		return c;
 	}
 	
 	@Override
 	public DMatrixRMaj elemmul(DMatrixRMaj a, DMatrixRMaj b) {
 		DMatrixRMaj c = a.copy();
-		ops.elementMult(a, b, c);
+//		ops.elementMult(a, b, c);
+		CommonOps_DDRM.elementMult(a, b, c);
 		return c;
 	}
 	
 	@Override
 	public DMatrixRMaj elemdiv(DMatrixRMaj a, DMatrixRMaj b) {
 		DMatrixRMaj c = a.copy();
-		ops.elementDiv(a, b, c);
+//		ops.elementDiv(a, b, c);
+		CommonOps_DDRM.elementDiv(a, b, c);
 		return c;
 	}
 	
@@ -207,46 +212,53 @@ public class MatCalcEJML implements MatCalc<DMatrixRMaj> {
 	@Override
 	public DMatrixRMaj trp(DMatrixRMaj m) {
 		DMatrixRMaj trp = zeros(m.numCols, m.numRows);
-		ops.transpose(m, trp);
+//		ops.transpose(m, trp);
+		CommonOps_DDRM.transpose(m, trp);
 		return trp;
 	}
 
 	@Override
 	public DMatrixRMaj add(DMatrixRMaj a, DMatrixRMaj b) {
 		DMatrixRMaj c = a.copy();
-		ops.plus(a, b, c);
+//		ops.plus(a, b, c);
+		CommonOps_DDRM.add(a, b, c);
 		return c;
 	}
 	
 	@Override
 	public DMatrixRMaj add_inp(DMatrixRMaj a, DMatrixRMaj b) {
-		ops.plus(a, b, a);
+//		ops.plus(a, b, a);
+		CommonOps_DDRM.add(a, b, a);
 		return a;
 	}
 	
 	@Override
 	public DMatrixRMaj add_inp(DMatrixRMaj a, double b) {
-		ops.plus(a, b, a);
+//		ops.plus(a, b, a);
+		CommonOps_DDRM.add(a, b, a);
 		return a;
 	}
 	
 	@Override
 	public DMatrixRMaj sub_inp(DMatrixRMaj a, DMatrixRMaj b) {
-		ops.minus(a, b, a);
+//		ops.minus(a, b, a);
+		CommonOps_DDRM.subtract(a, b, a);
 		return a;
 	}
 	
 	@Override
 	public DMatrixRMaj add(DMatrixRMaj a, double b) {
 		DMatrixRMaj c = a.copy();
-		ops.plus(a, b, c);
+//		ops.plus(a, b, c);
+		CommonOps_DDRM.add(a, b, c);
 		return c;
 	}
 
 	@Override
 	public DMatrixRMaj sub(DMatrixRMaj a, DMatrixRMaj b) {
 		DMatrixRMaj c = a.copy();
-		ops.minus(a, b, c);
+//		ops.minus(a, b, c);
+		CommonOps_DDRM.subtract(a, b, c);
 		return c;
 	}
 
@@ -314,12 +326,14 @@ public class MatCalcEJML implements MatCalc<DMatrixRMaj> {
 
 	@Override
 	public double det(DMatrixRMaj m) {
-		return ops.determinant(m);
+//		return ops.determinant(m);
+		return CommonOps_DDRM.det(m);
 	}
 	
 	@Override
 	public DMatrixRMaj exp_inp(DMatrixRMaj m) {
-		ops.elementExp(m, m);
+//		ops.elementExp(m, m);
+		CommonOps_DDRM.elementExp(m,m);
 		return m;
 	}
 	
@@ -371,7 +385,8 @@ public class MatCalcEJML implements MatCalc<DMatrixRMaj> {
 	@Override
 	public DMatrixRMaj mult_aTb(DMatrixRMaj a, DMatrixRMaj b) {
 		DMatrixRMaj c = zeros(a.numCols, b.numCols);
-		ops.multTransA(a, b, c);
+		// ops.multTransA(a, b, c);
+		CommonOps_DDRM.multTransA(a, b, c);
 		return c;
 	}
 	
