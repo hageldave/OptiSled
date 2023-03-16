@@ -4,7 +4,7 @@
 
 	<groupId>com.github.hageldave.optisled</groupId>
 	<artifactId>optisled</artifactId>
-	<version>0.0.3</version>
+	<version>0.0.4-SNAPSHOT</version>
 
 	<name>OptiSled</name>
 	<url>https://github.com/hageldave/OptiSled</url>
